@@ -1,0 +1,26 @@
+/* src/components/UserNavbar.css */
+.user-navbar {
+    background-color:#283441; /* Green background */
+    color: rgb(255, 255, 255);
+    padding: 16px;
+  }
+  
+  .navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .navbar-links {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .navbar-links a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .navbar-links a:hover {
+    text-decoration: underline;
+  }
+  

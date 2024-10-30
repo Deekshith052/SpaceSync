@@ -1,0 +1,72 @@
+/* src/LandingPage.css */
+
+body{
+  background: rgb(148,185,244);
+  background: linear-gradient(180deg, rgba(148,185,244,1) 36%, #363636 100%);
+}
+
+.landing-page {
+  display: flex;
+  flex-direction: row; /* Keep row layout */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center the items */
+  height: 80vh;
+  text-align: left; /* Align text to the left */
+  padding: 0 0px; /* Add padding on the left and right */
+  
+  
+}
+
+.text-container {
+  max-width: 40%; /* Limit the width of the text container */
+}
+
+.quote {
+  font-size: 36px; /* Adjust font size as needed */
+  margin-bottom: 20px; /* Space below the quote */
+  color: #333; /* Change text color as needed */
+}
+
+.image-container {
+  flex: 0.8; /* Take up 50% of the space */
+  display: flex;
+  justify-content: center; /* Center the image within its container */
+}
+
+.landing-image {
+  max-width: 80%; /* Ensure the image is responsive, adjust as needed */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.services-section {
+  text-align: center; /* Center the services title */
+  padding: 40px 20px; /* Add padding for spacing */
+  /* background-color: #525151; Change background color to gray */
+  
+}
+
+.services-title {
+  font-size: 28px; /* Adjust the font size */
+  margin-bottom: 30px; /* Space below the title */
+}
+
+.services-container {
+  display: flex; /* Use flexbox for layout */
+  justify-content: center; /* Center the items */
+  gap: 80px; /* Space between service items */
+}
+
+.service-item {
+  max-width: 300px; /* Limit the width of each service item */
+  flex: 1; /* Allow items to grow */
+}
+
+.service-image {
+  max-width: 100%; /* Ensure the image is responsive */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.service-description {
+  margin-top: 10px; /* Space between image and description */
+  color: #f3eaea; /* Adjust description color */
+}

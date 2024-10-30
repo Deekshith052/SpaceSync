@@ -1,0 +1,23 @@
+/* src/components/UserPage.css */
+.main-page {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .image-container {
+    display: flex;
+    justify-content: space-around; /* Evenly distribute images */
+    margin-top: 20px;
+    margin-left: 90px;
+  }
+  
+  .slot-image {
+    width: 300px; /* Adjust width as needed */
+    height: auto; /* Maintain aspect ratio */
+    cursor: pointer; /* Indicate it's clickable */
+  }
+  
+  .image-container p {
+    text-align: center; /* Center text under images */
+  }
+  

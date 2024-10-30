@@ -1,0 +1,38 @@
+/* src/components/WorkspaceReservation.css */
+.workspace-reservation {
+    padding: 20px;;
+    
+    background: rgb(148, 185, 244);
+    background: linear-gradient(180deg, rgba(148, 185, 244, 1) 36%, #363636 100%);
+  }
+  .custom-select {
+    height: 40px; /* Adjust the height as needed */
+    padding: 8px; /* Add padding for better appearance */
+    border-radius: 4px; /* Optional: Add some border radius */
+    border: 1px solid #ccc; /* Optional: Customize border color */
+  }
+  
+  
+  .let {
+    font-size: 40px;
+    font-style: italic;
+    margin-top: 220px;
+    margin-bottom: 100px;
+    margin-left: 110px;
+  }
+  
+  .her {
+    margin-top: 190px;
+    margin-bottom: 250px;
+  }
+  
+  /* src/components/UserNavbar.css */
+  .user-navbar {
+    background-color: #2D3748; /* Dark background for navbar */
+    width: 100%; /* Extend navbar to full width */
+    position: fixed; /* Keep navbar fixed at the top */
+    top: 0; /* Position at the top */
+    left: 0; /* Align to the left */
+    z-index: 1000; /* Ensure it appears above other content */
+  }
+  

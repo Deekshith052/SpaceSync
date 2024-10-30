@@ -1,0 +1,47 @@
+/* src/Navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #283441; /* Change this color as needed */
+    color: white;
+  }
+  
+  .navbar-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 40px; /* Adjust logo size as needed */
+    height: auto;
+    margin-right: 10px; /* Space between logo and name */
+  }
+  
+  .logo-name {
+    font-size: 24px; /* Adjust font size as needed */
+  }
+  
+  .navbar-right {
+    display: flex;
+  }
+  
+  .nav-button {
+    margin-left: 15px; /* Space between buttons */
+    padding: 10px 15px;
+    font-size: 16px;
+    color: white;
+    background-color: transparent;
+    /*border: 2px solid white; /* Button border 
+    border-radius: 5px;*/
+    cursor: pointer;
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s;
+  }
+  
+  .nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Light hover effect */
+  }
+  
+  
