@@ -12,17 +12,17 @@ import {
 const router = Router();
 
 // Read operations
-router.get('/slots', getAllSlots);
-router.get('/slots/:id', getSlotById as any);
+router.get('/parking/slots', getAllSlots);
+router.get('/parking/slots/:id', getSlotById as any);
 
 // Create operation
-router.post('/slots', createSlot);
-router.post('/slots/multi',createMultipleSlots as any)
+router.post('/parking/slots', createSlot);
+router.post('/parking/slots/multi',createMultipleSlots as any)
 
 // Update operation
-router.put('/slots/:id', updateSlot as any);
+router.put('/parking/slots/:id', updateSlot as any);
 
 // Delete operation
-router.delete('/slots/:id', deleteSlot as any);
+router.delete('/parking/slots/:id', deleteSlot as any);
 
 export default router;

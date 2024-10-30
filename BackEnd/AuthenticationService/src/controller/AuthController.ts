@@ -46,11 +46,6 @@ export const login = async (req: Request, res: Response) => {
     console.log(user_id,password);
     // Fetch user data by user_id
     const response = await axios.get(`http://localhost:4001/api/v1/users/${user_id}`);
-    if (response.status===404){
-      res.status(404).json({ message: 'User not found' });
-    }
-    else {
-      // Compare the provided password with the hashed password
       const user = response.data;
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
@@ -66,7 +61,6 @@ export const login = async (req: Request, res: Response) => {
         // Respond with the token
         res.status(200).json({ token });
       }
-    }
   } catch (error) {
     if (error instanceof AxiosError && error.response && error.response.status === 404) {
       res.status(404).json({ message: 'User not found' });

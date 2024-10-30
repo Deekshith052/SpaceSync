@@ -6,7 +6,7 @@ import eventSpaceBookingRoutes from './routes/EventSpaceBookingRoute';
 const app = express();
 
 app.use(bodyParser.json());
-app.use('/api/v1/eventSpaceBookings', eventSpaceBookingRoutes);
+app.use('/api/v1/eventspacebookings', eventSpaceBookingRoutes);
 
 connectDB();
 

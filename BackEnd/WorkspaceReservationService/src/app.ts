@@ -10,6 +10,6 @@ app.use(express.json());
 connectDB();
 
 // Routes
-app.use('/api/v1/workspace', bookingRoutes);
+app.use('/api/v1/workspacebooking', bookingRoutes);
 
 export default app;
