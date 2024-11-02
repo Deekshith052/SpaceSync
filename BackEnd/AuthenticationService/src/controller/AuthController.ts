@@ -15,7 +15,6 @@ export const register = async (req: Request, res: Response) => {
       // Construct the new user object with hashed password
       const newUser = { ...userData, password: hashedPassword };
   
-      console.log(newUser);
       // Send the new user data as a POST request to the specified URL
       const response = await axios.post('http://localhost:4001/api/v1/users', newUser);
   
@@ -43,7 +42,6 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   try {
     const { user_id, password, ...otherData} = req.body;
-    console.log(user_id,password);
     // Fetch user data by user_id
     const response = await axios.get(`http://localhost:4001/api/v1/users/${user_id}`);
       const user = response.data;

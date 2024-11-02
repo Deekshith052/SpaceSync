@@ -1,29 +1,86 @@
 // src/components/Signup.tsx
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Modal from './Modal'; // Import the Modal component
 import './Signup.css';
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
-    userId: '',
+    user_id: '',
     password: '',
     confirmPassword: '',
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     email: '',
-    phone: '',
+    phone_number: '',
     department: '',
     role: 'employee' // Default to employee
   });
+  const [error, setError] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const validateForm = () => {
+    const nameRegex = /^[A-Za-z]+$/; // Only letters
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/; // Password rules
+    const phoneRegex = /^\d{10}$/;
+
+    // Validate first name and last name
+    if (!nameRegex.test(formData.first_name)) {
+      setError("First name can only contain alphabets.");
+      return false;
+    }
+    if (!nameRegex.test(formData.last_name)) {
+      setError("Last name can only contain alphabets.");
+      return false;
+    }
+
+    if (!phoneRegex.test(formData.phone_number)) {
+      setError("Phone number must be exactly 10 digits.");
+      return false;
+    }
+    // Validate password
+    if (!passwordRegex.test(formData.password)) {
+      setError("Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.");
+      return false;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
+
+    setError(null);
+    return true; // All validations passed
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle signup logic here
-    console.log('Form Data:', formData);
+
+    if (!validateForm()) {
+      return; // If validation fails, do not proceed
+    }
+
+    try {
+      await axios.post('http://localhost:4000/api/v1/auth/register', formData);
+      setModalVisible(true); // Show the modal
+
+      // Automatically close the modal after 3 seconds
+      setTimeout(() => {
+        setModalVisible(false); // Hide the modal
+        navigate('/login'); // Redirect to login page
+      }, 2000);
+
+    } catch (err: any) {
+      console.error('Error:', err);
+      setError(err.response?.data?.message || 'Registration failed');
+    }
   };
 
   return (
@@ -36,8 +93,8 @@ const Signup: React.FC = () => {
             <input
               type="text"
               id="userId"
-              name="userId"
-              value={formData.userId}
+              name="user_id"
+              value={formData.user_id}
               onChange={handleChange}
               required
             />
@@ -47,8 +104,8 @@ const Signup: React.FC = () => {
             <input
               type="text"
               id="firstName"
-              name="firstName"
-              value={formData.firstName}
+              name="first_name"
+              value={formData.first_name}
               onChange={handleChange}
               required
             />
@@ -58,8 +115,8 @@ const Signup: React.FC = () => {
             <input
               type="text"
               id="lastName"
-              name="lastName"
-              value={formData.lastName}
+              name="last_name"
+              value={formData.last_name}
               onChange={handleChange}
               required
             />
@@ -80,8 +137,8 @@ const Signup: React.FC = () => {
             <input
               type="tel"
               id="phone"
-              name="phone"
-              value={formData.phone}
+              name="phone_number"
+              value={formData.phone_number}
               onChange={handleChange}
               required
             />
@@ -134,6 +191,10 @@ const Signup: React.FC = () => {
         </div>
         <button type="submit" className="signup-button">Sign Up</button>
       </form>
+      
+      {error && <div className="error-message">{error}</div>}
+      {modalVisible && <Modal message="Registration successful, Please login to continue" onClose={() => setModalVisible(false)} />}
+      
       <div className="login-link">
         <p>Already have an account? <a href="/login">Login</a></p>
       </div>

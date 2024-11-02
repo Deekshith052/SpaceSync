@@ -69,3 +69,9 @@ body{
   color: #4CAF50;
   text-decoration: none;
 }
+
+.error-message {
+  color: red; /* Set text color to red */
+  font-size: 14px; /* Optional: set font size */
+  margin-top: 10px; /* Optional: add some space above */
+}

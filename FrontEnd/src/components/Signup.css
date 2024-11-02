@@ -66,3 +66,9 @@
     text-decoration: none;
   }
   
+  /* Signup.css */
+.error-message {
+  color: red; /* Set text color to red */
+  font-size: 14px; /* Optional: set font size */
+  margin-top: 10px; /* Optional: add some space above */
+}

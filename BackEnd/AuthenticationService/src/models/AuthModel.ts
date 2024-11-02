@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IUser extends Document {
-  user_id: number;
+  user_id: string;
   password: string;
   email: string;
   first_name: string;
@@ -9,6 +9,5 @@ export interface IUser extends Document {
   phone_number: number;
   department: string;
   role: string;
-  designation: string;
   created_at: Date;
 }

@@ -2,9 +2,6 @@
 import React from 'react';
 import '../LandingPage.css'; // Import the CSS for styling
 import welcomeImage from "../image/Y.jpg"
-import carImage from "../image/car.jpg"
-import offi from "../image/Q.jpg"
-import eve from "../image/U.jpg"
 const LandingPage: React.FC = () => {
   return (
     <>

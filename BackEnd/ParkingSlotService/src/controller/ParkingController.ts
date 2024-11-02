@@ -92,3 +92,60 @@ export const deleteSlot = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error deleting slot', error });
   }
 };
+
+
+
+
+// Route to get available slots count grouped by floor and vehicle type
+export const getAvailability = async (req: Request, res: Response) => {
+  try {
+    // Aggregate data to get available slots grouped by floor and vehicle type
+    const availableSlots = await ParkingSlot.aggregate([
+      {
+        $match: { availability: true }, // Only consider available slots
+      },
+      {
+        $group: {
+          _id: {
+            floor: "$floor",
+            vehicle_type: "$vehicle_type",
+          },
+          availableCount: { $sum: 1 }, // Count the number of available slots
+        },
+      },
+      {
+        $project: {
+          floor: "$_id.floor",
+          vehicle_type: "$_id.vehicle_type",
+          availableCount: 1,
+          _id: 0, // Exclude the _id field from the result
+        },
+      },
+    ]);
+
+    // Respond with the array of available slots
+    res.status(200).json(availableSlots);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching available slots' });
+  }
+};
+
+
+export const getSlotsWithFloorAndType = async (req: Request, res: Response) => {
+  try {
+    const { floor, vehicle_type } = req.query;
+
+    const parsedFloor = parseInt(floor as string);
+    const parsedVehicleType = vehicle_type as string;
+
+    const slots = await ParkingSlot.find({ 
+      floor: parsedFloor, 
+      vehicle_type: parsedVehicleType 
+    });
+    
+    res.json(slots);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching slots', error });
+  }
+};

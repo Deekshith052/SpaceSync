@@ -2,7 +2,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 interface IUser extends Document {
-  user_id: number;
+  user_id: string;
   password: string;
   email: string;
   first_name: string;
@@ -10,12 +10,11 @@ interface IUser extends Document {
   phone_number: number;
   department: string;
   role: string;
-  designation: string;
   created_at: Date;
 }
 
 const UserSchema: Schema = new Schema({
-  user_id: { type: Number, required: true, unique: true },
+  user_id: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   first_name: { type: String, required: true },
@@ -23,7 +22,6 @@ const UserSchema: Schema = new Schema({
   phone_number: { type: Number, required: true },
   department: { type: String, required: true },
   role: { type: String, required: true },
-  designation: { type: String, required: true },
   created_at: { type: Date, default: Date.now },
 });
 

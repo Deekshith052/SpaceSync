@@ -1,55 +1,68 @@
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-// import { authorize } from './middleware/authMiddleware';
+import { authorize } from './middleware/authMiddleware';
+import cors from "cors";
 
 const app = express();
 const PORT = 4000;
 
+app.use(cors());
+
+app.use(
+  '/api/v1/auth/register',
+  createProxyMiddleware({ target: 'http://localhost:4010/api/v1/auth/register', changeOrigin: true })
+);
+app.use(
+  '/api/v1/auth/login',
+  createProxyMiddleware({ target: 'http://localhost:4010/api/v1/auth/login', changeOrigin: true })
+);
+
+
 app.use(
   '/api/v1/eventSpaceBookings',
-  // authorize as any,
+  authorize as any,
   createProxyMiddleware({ target: 'http://localhost:4008/api/v1/eventSpaceBookings', changeOrigin: true })
 );
 
 app.use(
   '/api/v1/eventspace',
-  // authorize as any,
+  authorize as any,
   createProxyMiddleware({ target: 'http://localhost:4007/api/v1/eventspace', changeOrigin: true })
 );
 
 app.use(
   '/api/v1/feedback',
-  // authorize as any,
+  authorize as any,
   createProxyMiddleware({ target: 'http://localhost:4002/api/v1/feedback', changeOrigin: true })
 );
 
 app.use(
   '/api/v1/parking/reservations',
-  // authorize as any,
+  authorize as any,
   createProxyMiddleware({ target: 'http://localhost:4004/api/v1/parking/reservations', changeOrigin: true })
 );
 
 app.use(
   '/api/v1/parking/slots',
-  // authorize as any,
+  authorize as any,
   createProxyMiddleware({ target: 'http://localhost:4003/api/v1/parking/slots', changeOrigin: true })
 );
 
 app.use(
   '/api/v1/users',
-  // authorize as any,
+  authorize as any,
   createProxyMiddleware({ target: 'http://localhost:4001/api/v1/users', changeOrigin: true })
 );
 
 app.use(
   '/api/v1/workspacebooking',
-  // authorize as any,
+  authorize as any,
   createProxyMiddleware({ target: 'http://localhost:4006/api/v1/workspacebooking', changeOrigin: true })
 );
 
 app.use(
   '/api/v1/workspace',
-  // authorize as any,
+  authorize as any,
   createProxyMiddleware({ target: 'http://localhost:4005/api/v1/workspace', changeOrigin: true })
 );
 
