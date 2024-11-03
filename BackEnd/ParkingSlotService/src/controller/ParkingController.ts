@@ -121,6 +121,9 @@ export const getAvailability = async (req: Request, res: Response) => {
           _id: 0, // Exclude the _id field from the result
         },
       },
+      {
+        $sort: { floor: 1 }, // Sort by floor in ascending order
+      },
     ]);
 
     // Respond with the array of available slots
@@ -130,6 +133,7 @@ export const getAvailability = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error fetching available slots' });
   }
 };
+
 
 
 export const getSlotsWithFloorAndType = async (req: Request, res: Response) => {

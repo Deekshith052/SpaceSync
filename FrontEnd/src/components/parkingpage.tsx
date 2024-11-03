@@ -178,7 +178,7 @@ const ParkingPage: React.FC = () => {
                 <Box
                   key={slot.parking_id}
                   className={`slot-block ${slot.availability ? 'available' : 'unavailable'} ${selectedSlot?.parking_id === slot.parking_id ? 'selected-slot' : ''}`}
-                  width="calc(100% / 20)"
+                  width="calc(100% / 22)"
                   height="50px"
                   margin="2px"
                   display="flex"
