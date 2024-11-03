@@ -116,17 +116,17 @@ tr:hover {
   }
   
   .available {
-    background-color: #cfcfcf; /* Light green */
+    background-color: #ebe9e9; /* Light green */
   }
   
   .unavailable {
-    background-color: #757575; /* Light red */
+    background-color: #8b8b8b; /* Light red */
   }
   
   
   /* Selected slot styling */
   .slot-block.selected-slot {
-    background-color: #3f5d5e; 
+    background-color: #253c49; 
     border: 1px solid #6aa2f7; 
     color: white;
     box-shadow: 0 0 10px rgba(49, 56, 52, 0.6); /* Soft green shadow */

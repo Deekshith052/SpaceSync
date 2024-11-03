@@ -22,13 +22,15 @@ const ParkingPage: React.FC = () => {
   const [slots, setSlots] = useState<ParkingSlotData[]>([]);
   const [availableSlots, setAvailableSlots] = useState<SlotBlockData[]>([]);
   const [error, setError] = useState<string | null>(null);
-  
   const [selectedFloor, setSelectedFloor] = useState<number | ''>('');
   const [selectedVehicleType, setSelectedVehicleType] = useState<string | ''>('');
   const [selectedSlot, setSelectedSlot] = useState<{ parking_id: number; slot_number: string } | null>(null);
+  
+  const user_id = '456789'; // Replace with actual user ID
+  const floorOptions = [1, 2, 3, 4, 5];
+  const vehicleTypeOptions = ['two-wheeler', 'four-wheeler'];
 
-  const user_id = '456789'; // Replace this with actual user ID from context/authentication
-
+  // Fetch all slots on mount
   useEffect(() => {
     const fetchSlots = async () => {
       try {
@@ -43,27 +45,44 @@ const ParkingPage: React.FC = () => {
     fetchSlots();
   }, []);
 
-  const floorOptions = [1, 2, 3, 4, 5];
-  const vehicleTypeOptions = ['two-wheeler', 'four-wheeler'];
+  // Function to fetch filtered slots based on selected floor and vehicle type
+const fetchFilteredSlots = async () => {
+  if (selectedFloor && selectedVehicleType) {
+    try {
+      const response = await axios.get('http://localhost:4003/api/v1/parking/slotsByFloorAndType', {
+        params: {
+          floor: selectedFloor,
+          vehicle_type: selectedVehicleType,
+        },
+      });
+      const updatedAvailableSlots: SlotBlockData[] = response.data;
+      setAvailableSlots(updatedAvailableSlots);
 
-  const handleSelectSlot = async () => {
-    if (selectedFloor && selectedVehicleType) {
-      try {
-        const response = await axios.get('http://localhost:4003/api/v1/parking/slotsByFloorAndType', {
-          params: {
-            floor: selectedFloor,
-            vehicle_type: selectedVehicleType,
-          },
-        });
-        setAvailableSlots(response.data);
-      } catch (error) {
-        console.error('Error fetching available slots:', error);
-        setError('An error has occurred while fetching available slot data.');
+      // Check if the selected slot is still available
+      if (selectedSlot) {
+        const currentSlot = updatedAvailableSlots.find(
+          (slot: SlotBlockData) => slot.parking_id === selectedSlot.parking_id
+        );
+        // If the selected slot is no longer available, deselect it
+        if (!currentSlot || !currentSlot.availability) {
+          setSelectedSlot(null); // Deselect the slot
+        }
       }
-    } else {
-      setError('Please select both floor and vehicle type.');
+    } catch (error) {
+      console.error('Error fetching available slots:', error);
+      setError('An error has occurred while fetching available slot data.');
     }
-  };
+  }
+};
+
+// Refresh available slots every 1 second based on selected floor and vehicle type
+useEffect(() => {
+  fetchFilteredSlots(); // Initial fetch for selected filter
+  const intervalId = setInterval(fetchFilteredSlots, 1000); // Refresh every 1 second
+
+  return () => clearInterval(intervalId); // Clear interval on unmount
+}, [selectedFloor, selectedVehicleType, selectedSlot]); // Add selectedSlot as a dependency
+
 
   const handleSlotClick = (parking_id: number, slot_number: string, isAvailable: boolean) => {
     if (isAvailable) {
@@ -79,7 +98,6 @@ const ParkingPage: React.FC = () => {
     if (selectedSlot) {
       const { parking_id } = selectedSlot;
       const parking_reservation_id = uuidv4(); // Generate unique reservation ID
-
 
       try {
         // PUT request to update availability
@@ -107,7 +125,6 @@ const ParkingPage: React.FC = () => {
     <Box>
       <UserNavbar />
       <Flex justify="space-between" p={4} align="flex-start" className="flex-container">
-        
         <Box flex="1" ml={10} className="table-container">
           <Flex justify="center" align="center" height="100%">
             <Table variant="simple" className="table">
@@ -133,10 +150,9 @@ const ParkingPage: React.FC = () => {
             <Text className="error-message">{error}</Text>
           )}
         </Box>
-        
+
         <Box flex="1" textAlign="center">
           <Heading className="heading">Parking Reservation</Heading>
-
           <Flex direction="column" align="center" mt={4}>
             <select
               className="dropdown"
@@ -163,8 +179,6 @@ const ParkingPage: React.FC = () => {
                 </option>
               ))}
             </select>
-
-            <Button className='button' onClick={handleSelectSlot}>Select Slot</Button>
           </Flex>
         </Box>
       </Flex>
@@ -198,7 +212,7 @@ const ParkingPage: React.FC = () => {
             <Button
               margin="0 0 50px 0"
               colorScheme="teal"
-              disabled={!selectedSlot}
+              disabled={!selectedSlot} // Disable button if no slot is selected
               onClick={handleConfirm}
             >
               Confirm
