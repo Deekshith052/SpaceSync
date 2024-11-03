@@ -1,0 +1,58 @@
+/* src/components/EventReservation2.css */
+
+.event-reservation-page {
+    padding: 100px;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+  }
+  
+  .page-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .event-table {
+    width: 80%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .event-table th,
+  .event-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .event-table th {
+    background-color: #e2e8f0;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .event-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .book-button {
+    padding: 8px 16px;
+    font-size: 0.9em;
+    background-color: #319795;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .book-button:hover {
+    background-color: #2c7a7b;
+  }
+  

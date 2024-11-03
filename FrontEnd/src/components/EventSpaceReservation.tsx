@@ -9,8 +9,7 @@ import './EventSpaceReservation.css';
 const EventSpaceReservation: React.FC = () => {
   const [eventName, setEventName] = useState<string>('');
   const [eventDate, setEventDate] = useState<Date | null>(null);
-  const [startTime, setStartTime] = useState<string>('');
-  const [endTime, setEndTime] = useState<string>('');
+  
   const [attendees, setAttendees] = useState<number | string>('');
   const [availability, setAvailability] = useState<string[]>([]);
 
@@ -46,20 +45,7 @@ const EventSpaceReservation: React.FC = () => {
               />
             </Box>
 
-            <Flex gap={4}>
-              <Input
-                placeholder="Start Time"
-                type="time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              />
-              <Input
-                placeholder="End Time"
-                type="time"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
-            </Flex>
+            
 
             <Input
               placeholder="Number of Attendees"

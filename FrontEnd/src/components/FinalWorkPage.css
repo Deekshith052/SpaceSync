@@ -1,0 +1,36 @@
+/* src/components/FinalWorkPage.css */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #f9f9f9;
+  }
+  
+  .final-work-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .success-message {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #4caf50;
+    margin-bottom: 15px;
+  }
+  
+  .shift-details, .floor-details, .project-name {
+    font-size: 1.2em;
+    color: #333;
+    margin: 5px 0;
+  }
+  
+  button {
+    font-size: 1em;
+  }
+  
