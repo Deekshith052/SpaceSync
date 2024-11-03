@@ -84,119 +84,130 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="signup-container">
-      <h2 className="signup-title">Sign Up</h2>
-      <form className="signup-form" onSubmit={handleSubmit}>
-        <div className="form-grid">
-          <div className="form-group">
-            <label htmlFor="userId">User ID</label>
-            <input
-              type="text"
-              id="userId"
-              name="user_id"
-              value={formData.user_id}
-              onChange={handleChange}
-              required
-            />
+    <div className="signup-page">
+      <div className="signup-container">
+        <h2 className="signup-title">Sign Up</h2>
+        <form className="signup-form" onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="userId">User ID</label>
+              <input
+                type="text"
+                id="userId"
+                name="user_id"
+                className="form-input"
+                value={formData.user_id}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="firstName">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                name="first_name"
+                className="form-input"
+                value={formData.first_name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                name="last_name"
+                className="form-input"
+                value={formData.last_name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email">Email ID</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="form-input"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="phone">Phone Number</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone_number"
+                className="form-input"
+                value={formData.phone_number}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="department">Department Name</label>
+              <input
+                type="text"
+                id="department"
+                name="department"
+                className="form-input"
+                value={formData.department}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="role">Role</label>
+              <select
+                id="role"
+                name="role"
+                className="form-input"
+                value={formData.role}
+                onChange={handleChange}
+              >
+                <option value="employee">Employee</option>
+                <option value="security">Security</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Set Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className="form-input"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                className="form-input"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="firstName">First Name</label>
-            <input
-              type="text"
-              id="firstName"
-              name="first_name"
-              value={formData.first_name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="lastName">Last Name</label>
-            <input
-              type="text"
-              id="lastName"
-              name="last_name"
-              value={formData.last_name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email ID</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="phone">Phone Number</label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone_number"
-              value={formData.phone_number}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="department">Department Name</label>
-            <input
-              type="text"
-              id="department"
-              name="department"
-              value={formData.department}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="role">Role</label>
-            <select
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-            >
-              <option value="employee">Employee</option>
-              <option value="security">Security</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Set Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <button type="submit" className="signup-button">Sign Up</button>
+        </form>
+        
+        {error && <div className="error-message">{error}</div>}
+        {modalVisible && <Modal message="Registration successful, Please login to continue" onClose={() => setModalVisible(false)} />}
+        
+        <div className="login-link">
+          <p>Already have an account? <a href="/login">Login</a></p>
         </div>
-        <button type="submit" className="signup-button">Sign Up</button>
-      </form>
-      
-      {error && <div className="error-message">{error}</div>}
-      {modalVisible && <Modal message="Registration successful, Please login to continue" onClose={() => setModalVisible(false)} />}
-      
-      <div className="login-link">
-        <p>Already have an account? <a href="/login">Login</a></p>
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ import FinalParkingPage from './components/FinalParkingPage';
 import FinalWorkPage from './components/FinalWorkPage';
 import EventReservation2 from './components/EventReservation2';
 import FinalEvent from './components/FinalEvent';
+import Feedback from './components/Feedback';
 
 
 
@@ -72,6 +73,10 @@ function App() {
 
       <Routes>
       <Route path='/finalevent' element={<><FinalEvent/></>}></Route>
+      </Routes>
+
+      <Routes>
+      <Route path='/feedback' element={<><Feedback/></>}></Route>
       </Routes>
 
     </Router>

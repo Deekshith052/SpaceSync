@@ -1,34 +1,51 @@
 /* src/components/Login.css */
-body{
-    background: rgb(148,185,244);
-    background: linear-gradient(180deg, rgba(148,185,244,1) 36%, #363636 100%); 
-    
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.login-container {
+
+/* src/components/Login.css */
+
+ html {
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; /* Align navbar at top and content below */
+  background: linear-gradient(180deg, rgba(148,185,244,1) 36%, #363636 100%);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding-top: 100px; /* Add padding to avoid overlap with navbar */
+}
+
+.login-container {
+  width: 100%;
   max-width: 400px;
-  margin: 80px auto;
-  padding: 80px;
+  padding: 40px;
+  margin-top: 40px;
+  margin-left: 450px; /* Space from the navbar */
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
+  text-align: center;
 }
+
+
+
 
 .login-title {
   text-align: center;
   margin-bottom: 20px;
   color: #333;
+  font-size: 24px;
 }
 
 .form-group {
-    margin-top: 30px;
-  margin-bottom: 30px;
+  margin: 20px 0;
+  text-align: left;
 }
 
 .form-group label {
@@ -46,9 +63,8 @@ body{
 
 .login-button {
   width: 100%;
-  margin-top: 20px;
-  align-self: center;
   padding: 10px;
+  margin-top: 20px;
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -61,8 +77,7 @@ body{
 }
 
 .signup-link {
-  text-align: center;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .signup-link a {
@@ -71,7 +86,7 @@ body{
 }
 
 .error-message {
-  color: red; /* Set text color to red */
-  font-size: 14px; /* Optional: set font size */
-  margin-top: 10px; /* Optional: add some space above */
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
 }

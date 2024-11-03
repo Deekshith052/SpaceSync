@@ -1,0 +1,52 @@
+/* src/components/Feedback.css */
+
+.feedback-page {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  .feedback-form {
+    
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 50px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    
+  }
+  
+  .feedback-list {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .feedback-item {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .feedback-item .star {
+    color: #FFD700;
+  }
+  
+  button {
+    font-size: 1em;
+    padding: 8px 16px;
+  }
+  
+  textarea {
+    width: 100%;
+    font-size: 1em;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
