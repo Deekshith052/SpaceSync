@@ -24,7 +24,7 @@ body, html {
     margin-bottom: 15px;
   }
   
-  .shift-details, .floor-details, .project-name {
+  .shift-details, .floor-details, .project-name, .details {
     font-size: 1.2em;
     color: #333;
     margin: 5px 0;
