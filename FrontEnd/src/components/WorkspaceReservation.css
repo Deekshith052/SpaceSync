@@ -1,5 +1,6 @@
 /* src/components/WorkspaceReservation.css */
 .workspace-reservation {
+  margin-top: 0px;
     padding: 20px;;
     
     background: rgb(148, 185, 244);
@@ -22,8 +23,8 @@
   }
   
   .her {
-    margin-top: 190px;
-    margin-bottom: 250px;
+    margin-top: 150px;
+    margin-bottom: 100px;
   }
   
   /* src/components/UserNavbar.css */

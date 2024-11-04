@@ -1,20 +1,64 @@
 // src/components/WorkspaceReservation.tsx
 import React, { useState } from 'react';
-import { Box, Flex, Heading, Button } from '@chakra-ui/react';
+import { Box, Flex, Heading, Button, Input, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import UserNavbar from './UserNavbar';
 import './WorkspaceReservation.css';
 
+interface Slot {
+  id: string;
+  slotNumber: string;
+  availability: boolean;
+}
+
 const WorkspaceReservation: React.FC = () => {
   const [shift, setShift] = useState<string>('');
   const [project, setProject] = useState<string>('');
+  const [date, setDate] = useState<string>('');
+  const [reserveForSevenDays, setReserveForSevenDays] = useState<boolean>(false);
+  const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
+  const [showSlots, setShowSlots] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
-  const handleBookSpace = () => {
-    console.log(`Shift: ${shift}, Project: ${project}`);
-    // Navigate to final work page after booking
-    navigate('/finalwork');
+  const handleBookSlot = () => {
+    if (shift && project && date) {
+      setShowSlots(true);
+    }
   };
+
+  const handleSlotClick = (slot: Slot) => {
+    if (slot.availability) {
+      setSelectedSlot(slot);
+    }
+  };
+
+  const handleConfirm = () => {
+    if (selectedSlot) {
+      navigate('/finalwork');
+    }
+  };
+
+  // Helper function to generate slots from A1 to C10
+  const generateSlots = () => {
+    const rows = ['A', 'B', 'C'];
+    let slots: Slot[] = [];
+    rows.forEach((row) => {
+      for (let i = 1; i <= 10; i++) {
+        slots.push({
+          id: `${row}${i}`,
+          slotNumber: `${row}${i}`,
+          availability: true,
+        });
+      }
+    });
+    return slots;
+  };
+
+  const availableSlots = generateSlots();
+
+  // Get today's date in 'YYYY-MM-DD' format
+  const today = new Date().toISOString().split('T')[0];
 
   return (
     <Box className="workspace-reservation">
@@ -24,7 +68,7 @@ const WorkspaceReservation: React.FC = () => {
           <Heading size="lg" className="let">Work Space Reservation</Heading>
         </Box>
         <Box className="her" flex="1" ml={50}>
-          <Flex direction="column" gap={10}>
+          <Flex direction="column" gap={6}>
             <select
               className="custom-select"
               value={shift}
@@ -49,12 +93,74 @@ const WorkspaceReservation: React.FC = () => {
               <option value="other">Other</option>
             </select>
 
-            <Button colorScheme="teal" onClick={handleBookSpace}>
-              Book WorkSpace
+            <Input background={'white'}
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              placeholder="Select Date"
+              min={today} // Restrict to today's date or later
+            />
+
+            <Flex alignItems="center" gap={2}>
+              <input
+                type="checkbox"
+                checked={reserveForSevenDays}
+                onChange={(e) => setReserveForSevenDays(e.target.checked)}
+              />
+              <Text>Reserve for Seven Days</Text>
+            </Flex>
+
+            <Button colorScheme="teal" onClick={handleBookSlot}>
+              Book Slot
             </Button>
           </Flex>
         </Box>
       </Flex>
+
+      {showSlots && (
+        <Box mt={6}>
+          <Text fontSize="lg" mb={4} textAlign="center">
+            Choose a Workspace Slot
+          </Text>
+          <Box mx="auto" maxW="800px">
+            <Flex flexDirection="column" alignItems="center" gap={2}>
+              {['A', 'B', 'C'].map((row) => (
+                <Flex key={row} gap={2}>
+                  {availableSlots
+                    .filter((slot) => slot.slotNumber.startsWith(row))
+                    .map((slot) => (
+                      <Box
+                        key={slot.id}
+                        className={`slot-block ${slot.availability ? 'available' : 'unavailable'} ${selectedSlot?.id === slot.id ? 'selected-slot' : ''}`}
+                        width="60px"
+                        height="60px"
+                        margin="4px"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        border="1px solid"
+                        cursor={slot.availability ? 'pointer' : 'not-allowed'}
+                        onClick={() => handleSlotClick(slot)}
+                      >
+                        {slot.slotNumber}
+                      </Box>
+                    ))}
+                </Flex>
+              ))}
+            </Flex>
+
+            <Flex justify="center" mt={4}>
+              <Button
+                colorScheme="teal"
+                disabled={!selectedSlot} // Disable button if no slot is selected
+                onClick={handleConfirm}
+              >
+                Confirm
+              </Button>
+            </Flex>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };

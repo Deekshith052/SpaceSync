@@ -17,10 +17,14 @@ import ParkingPage from './components/parkingpage';
 import WorkspaceReservation from './components/WorkspaceReservation';
 import EventSpaceReservation from './components/EventSpaceReservation';
 import FinalParkingPage from './components/FinalParkingPage';
+import TrackReservation from './components/TrackReservation';
 import FinalWorkPage from './components/FinalWorkPage';
 import EventReservation2 from './components/EventReservation2';
 import FinalEvent from './components/FinalEvent';
 import Feedback from './components/Feedback';
+import Admin from './components/Admin';
+import ViewFeedback from './components/ViewFeedback';
+import ManageUsers from './components/MangeUsers';
 
 
 
@@ -34,9 +38,8 @@ function App() {
       <Routes>
         <Route path='/' element={<><Navbar /><LandingPage/></>}></Route>
          <Route path='/login' element={<><Navbar /><Login/></>}></Route> 
-        
-
       </Routes>
+
       <Routes>
       <Route path='/signup' element={<><Navbar /><Signup/></>}></Route>
       </Routes>
@@ -54,6 +57,7 @@ function App() {
       <Routes>
       <Route path='/workspacereservation' element={<><WorkspaceReservation/></>}></Route>
       </Routes>
+      
 
       <Routes>
       <Route path='/eventspacereservation' element={<><EventSpaceReservation/></>}></Route>
@@ -61,6 +65,10 @@ function App() {
 
       <Routes>
       <Route path='/finalparking' element={<><FinalParkingPage/></>}></Route>
+      </Routes>
+
+      <Routes>
+      <Route path='/track-reservation' element={<><TrackReservation/></>}></Route>
       </Routes>
 
       <Routes>
@@ -78,6 +86,18 @@ function App() {
       <Routes>
       <Route path='/feedback' element={<><Feedback/></>}></Route>
       </Routes>
+
+      <Routes>
+      <Route path='/admin' element={<><Admin/></>}></Route>
+      </Routes>
+
+       <Routes>
+      <Route path='/view-feedback' element={<><ViewFeedback/></>}></Route>
+      </Routes> 
+
+      <Routes>
+      <Route path='/manage-users' element={<><ManageUsers/></>}></Route>
+      </Routes> 
 
     </Router>
     

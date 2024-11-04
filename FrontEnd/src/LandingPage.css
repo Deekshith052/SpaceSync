@@ -1,8 +1,7 @@
 /* src/LandingPage.css */
 
 body{
-  background: rgb(148,185,244);
-  background: linear-gradient(180deg, rgba(148,185,244,1) 36%, #363636 100%);
+background-color: aquamarine;
 }
 
 .landing-page {

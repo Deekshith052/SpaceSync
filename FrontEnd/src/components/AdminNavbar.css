@@ -1,0 +1,41 @@
+/* src/components/AdminNavbar.css */
+
+.admin-navbar {
+    background-color: #283441;
+    color: white;
+    padding: 1rem;
+  }
+  
+  .admin-navbar a {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .admin-navbar a:hover {
+    color: #cbd5e0;
+  }
+  /* src/components/Admin.css */
+
+.admin-navbar {
+    width: 100%;
+    background-color: #4a4a4a; /* Grey color */
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .count-box {
+    width: 120px;
+    height: 100px;
+    background-color: #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 8px;
+    margin-top: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  
