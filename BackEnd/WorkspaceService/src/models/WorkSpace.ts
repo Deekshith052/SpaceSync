@@ -10,7 +10,6 @@ export interface Workspace extends Document {
 const workspaceSchema = new Schema({
   workspace_id: { type: Number, required: true, unique: true },
   floor: { type: Number, required: true },
-  availability: { type: Boolean, required: true },
   project_name: { type: String, required: true },
 });
 

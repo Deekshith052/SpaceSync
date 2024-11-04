@@ -63,3 +63,22 @@ export const deleteFeedback = async (req: Request, res: Response) => {
     res.status(500).json({ error });
   }
 };
+
+
+export const getFeedbacksByUserId = async (req: Request, res: Response) => {
+  const { userId } = req.params; // Assuming userId is passed as a route parameter
+
+  try {
+      // Find feedbacks for the given userId
+      const feedbacks = await Feedback.find({ userId: userId });
+
+      if (feedbacks.length === 0) {
+          return res.status(404).json({ message: 'No feedbacks found for this user.' });
+      }
+
+      return res.status(200).json(feedbacks);
+  } catch (error) {
+      console.error('Error fetching feedbacks:', error);
+      return res.status(500).json({ message: 'Server error', error });
+  }
+};
