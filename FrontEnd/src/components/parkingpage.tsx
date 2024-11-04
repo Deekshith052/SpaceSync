@@ -5,6 +5,7 @@ import { Thead, Tbody, Tr, Td, Th, Table } from '@chakra-ui/table';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import './ParkingPage.css';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 interface ParkingSlotData {
   floor: number;
@@ -19,6 +20,7 @@ interface SlotBlockData {
 }
 
 const ParkingPage: React.FC = () => {
+  const navigate= useNavigate();
   const [slots, setSlots] = useState<ParkingSlotData[]>([]);
   const [availableSlots, setAvailableSlots] = useState<SlotBlockData[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +28,7 @@ const ParkingPage: React.FC = () => {
   const [selectedVehicleType, setSelectedVehicleType] = useState<string | ''>('');
   const [selectedSlot, setSelectedSlot] = useState<{ parking_id: number; slot_number: string } | null>(null);
   
-  const user_id = '456789'; // Replace with actual user ID
+  const user_id = '123456'; // Replace with actual user ID
   const floorOptions = [1, 2, 3, 4, 5];
   const vehicleTypeOptions = ['two-wheeler', 'four-wheeler'];
 
@@ -106,13 +108,13 @@ useEffect(() => {
         });
 
         // POST request to create reservation
-        await axios.post(`http://localhost:4004/api/v1/parking/reservations`, {
+        await axios.post(`http://localhost:4004/api/v1/parking/reservations/slot`, {
           parking_id,
           user_id,
           parking_reservation_id,
         });
 
-        alert(`Reservation confirmed for slot ${selectedSlot.slot_number} with ID ${parking_reservation_id}`);
+        navigate("/finalparking");
         setSelectedSlot(null); // Reset selected slot after confirmation
       } catch (error) {
         console.error('Error confirming reservation:', error);
@@ -184,8 +186,7 @@ useEffect(() => {
       </Flex>
 
       {availableSlots.length > 0 && (
-        <Box mt={4}>
-          <Heading size="md" mb={2}>Available Parking Slots</Heading>
+        <Box mt={4} style={{marginTop:"50px"}}>
           <Box mx={4}>
             <Flex flexWrap="wrap">
               {availableSlots.map((slot) => (

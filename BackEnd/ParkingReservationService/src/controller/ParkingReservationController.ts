@@ -55,3 +55,24 @@ export const deleteReservation = async (req: Request, res: Response) => {
     res.status(500).json({ error });
   }
 };
+
+
+export const getRecentReservationByUserId = async (req : Request, res: Response) => {
+  const userId = req.params.userId;
+
+  try {
+    const recentReservation = await Reservation.find({ user_id: userId })
+      .sort({ created_at: -1 })
+      .limit(1)
+      .exec();
+
+    if (recentReservation.length > 0) {
+      res.status(200).json(recentReservation[0]);
+    } else {
+      res.json({ message: 'No reservations found for this user.' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
