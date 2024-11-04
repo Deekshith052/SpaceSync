@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
 import { Box, Flex, Heading, Button, Input, Text } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-// import jwt_decode from 'jwt-decode';
 import UserNavbar from './UserNavbar';
 import './WorkspaceReservation.css';
+import { useNavigate } from 'react-router-dom';
+// import jwt_decode from 'jwt-decode';
+
+// interface DecodedToken {
+//   user_id: string;
+// }
+// const token = sessionStorage.getItem('token'); 
+  
+// const decoded: DecodedToken = jwt_decode(token);
+// const userId=decoded.user_id;
+const userId='U002';
 
 interface Slot {
   workspace_id: string;
   floor: number;
   availability: boolean;
 }
-
-// interface DecodedToken {
-//   user_id: string; 
-// }
 
 const WorkspaceReservation: React.FC = () => {
   const [shift, setShift] = useState<string>('');
@@ -24,32 +29,43 @@ const WorkspaceReservation: React.FC = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [showSlots, setShowSlots] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [reservationDetails, setReservationDetails] = useState<any>(null); // Adjust type as needed
 
-  const navigate = useNavigate();
+  const navigate=useNavigate();
 
   const handleBookSlot = async () => {
     if (shift && project && date) {
       try {
-        // Fetch available slots by project
-        const { data: availableSlots } = await axios.get(`http://localhost:4005/api/v1/workspaceByProject`, {
-          params: { project_name: project },
-        });
-        
-        // Fetch already booked slots
-        const { data: bookedWorkspaceResponse } = await axios.get(`http://localhost:4006/api/v1/workspacebookingDone`, {
-          params: { project, date, shift },
+        // Check if there's an existing reservation
+        const { data: existingReservation } = await axios.get(`http://localhost:4006/api/v1/workspacebookingUserDate`, {
+          params: { user_id: userId, date },
         });
 
-        const bookedWorkspaceIds = bookedWorkspaceResponse.workspace_ids;
+        if (existingReservation) {
+          // Display existing reservation details in a modal
+          setReservationDetails(existingReservation);
+          setModalOpen(true);
+        } else {
+          // Fetch available slots by project
+          const { data: availableSlots } = await axios.get(`http://localhost:4005/api/v1/workspaceByProject`, {
+            params: { project_name: project },
+          });
 
-        // Map available slots and disable booked ones
-        const updatedSlots = availableSlots.map((slot: Slot) => ({
-          ...slot,
-          availability: !bookedWorkspaceIds.includes(slot.workspace_id),
-        }));
-
-        setSlots(updatedSlots);
-        setShowSlots(true);
+          const { data: bookedWorkspaceResponse } = await axios.get(`http://localhost:4006/api/v1/workspacebookingDone`, {
+            params: { project, date, shift },
+          });
+  
+          const bookedWorkspaceIds = bookedWorkspaceResponse.workspace_ids;
+  
+          // Map available slots and disable booked ones
+          const updatedSlots = availableSlots.map((slot: Slot) => ({
+            ...slot,
+            availability: !bookedWorkspaceIds.includes(slot.workspace_id),
+          }));
+          setSlots(updatedSlots);
+          setShowSlots(true);
+        }
       } catch (error) {
         console.error('Error fetching slots:', error);
       }
@@ -66,14 +82,6 @@ const WorkspaceReservation: React.FC = () => {
     if (selectedSlot) {
       const reservation_id = uuidv4(); // Generate a unique reservation ID
 
-      
-      // const token = sessionStorage.getItem('jwtToken'); 
-      let userId = 'U002';
-      // if (token) {
-      //   const decoded: DecodedToken = jwt_decode(token);
-      //   userId = decoded.user_id; 
-      // }
-
       try {
         // Make a POST request to save the booking
         await axios.post('http://localhost:4006/api/v1/workspacebooking', {
@@ -85,7 +93,6 @@ const WorkspaceReservation: React.FC = () => {
           date: date,
         });
 
-        // Pass state information to the finalwork page
         navigate('/finalwork', {
           state: {
             reservation_id,
@@ -96,10 +103,30 @@ const WorkspaceReservation: React.FC = () => {
             date,
           },
         });
+        // Redirect to final work page (you can adjust this)
+        // navigate('/finalwork', { state: { reservation_id, ... } });
       } catch (error) {
         console.error('Error confirming booking:', error);
       }
     }
+  };
+
+  const handleCancelReservation = async () => {
+    if (reservationDetails) {
+      try {
+        await axios.delete(`http://localhost:4006/api/v1/workspacebooking/${reservationDetails.workspace_reservation_id}`);
+        setModalOpen(false);
+        // Reset date and other necessary states
+        setDate('');
+      } catch (error) {
+        console.error('Error cancelling reservation:', error);
+      }
+    }
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setDate(''); // Reset date when closing modal
   };
 
   // Get today's date in 'YYYY-MM-DD' format
@@ -185,6 +212,28 @@ const WorkspaceReservation: React.FC = () => {
             </Button>
           </Flex>
         </Box>
+      )}
+
+      {/* Modal for displaying reservation details */}
+      {modalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={handleCloseModal}>&times;</span>
+            <h2>Existing Reservation</h2>
+            {reservationDetails ? (
+              <div>
+                <p><strong>Reservation ID:</strong> {reservationDetails.workspace_reservation_id}</p>
+                <p><strong>Workspace ID:</strong> {reservationDetails.workspace_id}</p>
+                <p><strong>Date:</strong> {reservationDetails.date.split('T')[0]}</p>
+                <p><strong>Shift:</strong> {reservationDetails.shift}</p>
+                <p><strong>Project:</strong> {reservationDetails.project}</p>
+                <Button colorScheme="red" onClick={handleCancelReservation}>Cancel Reservation</Button>
+              </div>
+            ) : (
+              <p>No reservation found.</p>
+            )}
+          </div>
+        </div>
       )}
     </Box>
   );
