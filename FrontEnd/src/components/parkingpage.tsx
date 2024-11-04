@@ -124,7 +124,7 @@ useEffect(() => {
   };
 
   return (
-    <Box>
+    <Box className='conatainer-box'>
       <UserNavbar />
       <Flex justify="space-between" p={4} align="flex-start" className="flex-container">
         <Box flex="1" ml={10} className="table-container">
