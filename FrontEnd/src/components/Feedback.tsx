@@ -1,11 +1,13 @@
 // src/components/Feedback.tsx
-import React, { useState } from 'react';
-import { Box, Flex, Heading, Text, Textarea, Button, Input } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Box, Flex, Heading, Text, Textarea, Button } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 import UserNavbar from './UserNavbar';
 import './Feedback.css';
 
 interface FeedbackItem {
+  feedback_id: string;
   text: string;
   rating: number;
 }
@@ -17,23 +19,61 @@ const Feedback: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const feedbacksPerPage = 10;
 
+  const userId = 'someUserId'; // Replace with actual user ID if available
+
+  const fetchFeedbacks = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4002/api/v1/feedbackByUserId/${userId}`);
+      // Map the API data to match the FeedbackItem interface
+      const formattedFeedbacks = response.data.map((item: any) => ({
+        feedback_id: item.feedback_id,
+        text: item.content, // Map 'content' from the API to 'text' used in FeedbackItem
+        rating: item.rating,
+      }));
+
+      setFeedbackList(formattedFeedbacks);
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch feedbacks when component mounts
+    fetchFeedbacks();
+  }, []);
+
   const handleRatingClick = (rate: number) => {
     setRating(rate);
   };
 
-  const handleFeedbackSubmit = () => {
+  const handleFeedbackSubmit = async () => {
     if (feedbackText.trim() && rating > 0) {
-      const newFeedback = { text: feedbackText, rating };
-      setFeedbackList([newFeedback, ...feedbackList]);
-      setFeedbackText('');
-      setRating(0);
+      const feedback_id = `FB-${Date.now()}`;
+      const newFeedback = {
+        feedback_id,
+        userId,
+        content: feedbackText,
+        rating,
+        reply: '',
+      };
+
+      try {
+        await axios.post('http://localhost:4002/api/v1/feedback', newFeedback);
+        alert('Feedback saved!');
+        
+        // Clear form and refetch feedbacks
+        setFeedbackText('');
+        setRating(0);
+        fetchFeedbacks(); // Refresh feedback list after posting new feedback
+      } catch (error) {
+        console.error('Error posting feedback:', error);
+      }
     }
   };
 
   const indexOfLastFeedback = currentPage * feedbacksPerPage;
   const indexOfFirstFeedback = indexOfLastFeedback - feedbacksPerPage;
   const currentFeedbacks = feedbackList.slice(indexOfFirstFeedback, indexOfLastFeedback);
-
   const totalPages = Math.ceil(feedbackList.length / feedbacksPerPage);
 
   const handleNextPage = () => {
@@ -87,13 +127,9 @@ const Feedback: React.FC = () => {
           </Box>
         ))}
         <Flex mt={4} justify="center" gap={4}>
-          <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
-            Previous
-          </Button>
+          <Button onClick={handlePreviousPage} disabled={currentPage === 1}>Previous</Button>
           <Text>Page {currentPage} of {totalPages}</Text>
-          <Button onClick={handleNextPage} disabled={currentPage === totalPages}>
-            Next
-          </Button>
+          <Button onClick={handleNextPage} disabled={currentPage === totalPages}>Next</Button>
         </Flex>
       </Box>
     </Box>

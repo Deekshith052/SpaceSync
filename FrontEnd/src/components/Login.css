@@ -15,6 +15,7 @@
   justify-content: center;
   flex-direction: column; /* Align navbar at top and content below */
   background: linear-gradient(180deg, rgba(148,185,244,1) 36%, #363636 100%);
+ 
   
 
   font-family: Arial, sans-serif;

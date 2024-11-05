@@ -2,7 +2,7 @@
 
 .feedback-page {
     margin-top: 20px;
-    background-color: #f9f9f9;
+    background-color:linear-gradient(180deg, rgb(139, 170, 219) 36%, rgba(148,185,244,1) 100%);
     min-height: 100vh;
     padding: 20px;
   }

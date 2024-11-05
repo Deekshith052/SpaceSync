@@ -75,7 +75,7 @@ const TrackReservation: React.FC = () => {
   );
 
   return (
-    <div style={{ background: 'linear-gradient(180deg, rgba(148,185,244,1) 36%, #363636 100%)', minHeight: '100vh', paddingTop: '20px' }}>
+    <div style={{ background: 'linear-gradient(180deg, rgb(139, 170, 219) 36%, rgba(148,185,244,1) 100%)', minHeight: '100vh', paddingTop: '20px' }}>
       <UserNavbar />
       <div style={{ padding: '50px', maxWidth: '800px', margin: '0 auto',marginTop:'100px',marginBottom:'100px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
         <div style={{ textAlign: 'center', marginTop: '30px' }}>

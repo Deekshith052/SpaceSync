@@ -106,7 +106,7 @@ const ManageUsers: React.FC = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh', paddingTop: '60px' }}>
+    <div style={{ backgroundColor: 'rgb(196, 194, 194)', minHeight: '100vh', paddingTop: '60px' }}>
       <AdminNavbar />
       <ToastContainer />
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
