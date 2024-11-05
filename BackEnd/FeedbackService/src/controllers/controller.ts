@@ -38,7 +38,7 @@ export const getFeedbackById = async (req: Request, res: Response) => {
 export const updateFeedback = async (req: Request, res: Response) => {
   try {
     const updatedFeedback = await Feedback.findOneAndUpdate(
-      { _id: req.params.id },
+      { feedback_id: req.params.id },
       req.body,
       { new: true }
     );

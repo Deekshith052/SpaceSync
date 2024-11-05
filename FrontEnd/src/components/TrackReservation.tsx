@@ -1,51 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import UserNavbar from './UserNavbar';
+import axios from 'axios';
+// import jwt_decode from 'jwt-decode';
 
 // Define the structure of a reservation
 interface Reservation {
-  id: number;
+  id: string; 
   date: string;
-  slotNumber: number;
-  floorNumber: number;
 }
 
-// Sample data for demonstration
-const sampleData = {
-  parking: Array.from({ length: 15 }, (_, i) => ({
-    id: i + 1,
-    date: `2023-10-${(i % 30) + 1}`,
-    slotNumber: i + 101,
-    floorNumber: (i % 3) + 1,
-  })),
-  workspace: Array.from({ length: 15 }, (_, i) => ({
-    id: i + 1,
-    date: `2023-09-${(i % 30) + 1}`,
-    slotNumber: i + 201,
-    floorNumber: (i % 3) + 1,
-  })),
-  eventspace: Array.from({ length: 15 }, (_, i) => ({
-    id: i + 1,
-    date: `2023-08-${(i % 30) + 1}`,
-    slotNumber: i + 301,
-    floorNumber: (i % 3) + 1,
-  })),
-};
+interface JwtPayload {
+  user_id: string;
+  role: string;
+}
 
 const TrackReservation: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string>('parking');
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const userId = '123456'; // Replace with actual user ID as needed
+  type UserRole = 'employee' | 'manager' ; // Add other roles as needed
+  const role: UserRole = 'employee';
 
   const itemsPerPage = 10;
+
+  // const token = sessionStorage.getItem('token'); 
+  // const decodedToken = token ? jwt_decode<JwtPayload>(token) : null;
+  // const userId = decodedToken ? decodedToken.user_id : null;
+  // const role = decodedToken ? decodedToken.role : null;
 
   useEffect(() => {
     loadReservations(selectedService);
   }, [selectedService]);
 
-  const loadReservations = (service: string) => {
-    const data = sampleData[service as keyof typeof sampleData];
-    setReservations(data);
-    setCurrentPage(1);
+  const loadReservations = async (service: string) => {
+    try {
+      let url = '';
+      if (service === 'parking') {
+        url = `http://localhost:4004/api/v1/parking/reservations/slotsInfoByUserId/${userId}`;
+      } else if (service === 'eventspace') {
+        url = `http://localhost:4008/api/v1/eventspacebookingsByUserId/${userId}`;
+      } else if (service === 'workspace') {
+        url = `http://localhost:4006/api/v1/workspacebookingByUserId/${userId}`;
+      }
+
+      const response = await axios.get(url);
+      const data = response.data.map((item: any) => {
+        // Map response data to standardized structure
+        if (service === 'parking') {
+          return { id: item.parking_id, date: item.created_at };
+        } else if (service === 'eventspace') {
+          return { id: item.eventspace_id, date: item.eventDate };
+        } else if (service === 'workspace') {
+          return { id: item.workspace_id, date: item.date };
+        }
+        return item; // Fallback, should not reach here
+      });
+
+      setReservations(data);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error("Error fetching reservations:", error);
+      setReservations([]); // Clear data in case of error
+    }
   };
 
   const handleServiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -56,10 +73,6 @@ const TrackReservation: React.FC = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  // background: rgb(148,185,244);
-  // background: linear-gradient(180deg, rgba(148,185,244,1) 36%, #363636 100%); 
-
 
   return (
     <div style={{ background: 'linear-gradient(180deg, rgba(148,185,244,1) 36%, #363636 100%)', minHeight: '100vh', paddingTop: '20px' }}>
@@ -74,25 +87,24 @@ const TrackReservation: React.FC = () => {
             onChange={handleServiceChange}
             style={{ width: '100%', padding: '8px', marginBottom: '20px' }}
           >
-            <option value="parking">Parking Reservation Service</option>
-            <option value="workspace">Workspace Reservation Service</option>
-            <option value="eventspace">Event Space Reservation Service</option>
+            <option value="parking">Parking Reservation</option>
+            <option value="workspace">Workspace Reservation</option>
+            {/* Conditionally render the Event Space Reservation option */}
+            {role !== 'employee' && <option value="eventspace">Event Space Reservation</option>}
           </select>
 
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ backgroundColor: '#e0e0e0', textAlign: 'left' }}>
                 <th style={{ padding: '10px', border: '1px solid #ddd' }}>Date</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Slot Number</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Floor Number</th>
+                <th style={{ padding: '10px', border: '1px solid #ddd' }}>ID</th>
               </tr>
             </thead>
             <tbody>
               {displayedReservations.map((reservation) => (
                 <tr key={reservation.id}>
                   <td style={{ padding: '10px', border: '1px solid #ddd' }}>{reservation.date}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{reservation.slotNumber}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{reservation.floorNumber}</td>
+                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{reservation.id}</td>
                 </tr>
               ))}
             </tbody>

@@ -191,3 +191,21 @@ export const getBookingsByUserIdAndDate = async (req: Request, res: Response) =>
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+
+export const getAllBookingsByUserId = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+
+  try {
+      // Find all bookings by user_id, selecting only the `date` and `workspace_id` fields
+      const bookings = await Booking.find({ user_id:userId })
+          .select('date workspace_id -_id')
+          .sort({ date: -1 }); // Sort by date in descending order
+
+      // Return the list of bookings with only `date` and `workspace_id`
+      res.status(200).json(bookings);
+  } catch (error) {
+      console.error('Error fetching bookings:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  } 
+};
