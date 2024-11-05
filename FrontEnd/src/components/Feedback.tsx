@@ -4,12 +4,14 @@ import axios from 'axios';
 import { Box, Flex, Heading, Text, Textarea, Button } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 import UserNavbar from './UserNavbar';
+import {jwtDecode} from 'jwt-decode';
 import './Feedback.css';
 
 interface FeedbackItem {
   feedback_id: string;
   text: string;
   rating: number;
+  reply: string;
 }
 
 const Feedback: React.FC = () => {
@@ -19,7 +21,17 @@ const Feedback: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const feedbacksPerPage = 10;
 
-  const userId = 'someUserId'; // Replace with actual user ID if available
+  // Decode the userId from the JWT token stored in sessionStorage
+  const token = sessionStorage.getItem('token');
+  let userId = '';
+
+  if (token) {
+    const decodedToken: { id: string } = jwtDecode(token);
+    userId = decodedToken.id;
+  }
+  else{
+    alert("user is not authenticated");
+  }
 
   const fetchFeedbacks = async () => {
     try {
@@ -29,8 +41,8 @@ const Feedback: React.FC = () => {
         feedback_id: item.feedback_id,
         text: item.content, // Map 'content' from the API to 'text' used in FeedbackItem
         rating: item.rating,
+        reply: item.reply
       }));
-
       setFeedbackList(formattedFeedbacks);
     } catch (error) {
       console.error('Error fetching feedback:', error);
@@ -38,9 +50,10 @@ const Feedback: React.FC = () => {
   };
 
   useEffect(() => {
-    // Fetch feedbacks when component mounts
-    fetchFeedbacks();
-  }, []);
+    if (userId) {
+      fetchFeedbacks();
+    }
+  }, [userId]);
 
   const handleRatingClick = (rate: number) => {
     setRating(rate);
@@ -54,7 +67,6 @@ const Feedback: React.FC = () => {
         userId,
         content: feedbackText,
         rating,
-        reply: '',
       };
 
       try {
@@ -87,6 +99,10 @@ const Feedback: React.FC = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  if (!token || !userId) {
+    return <Text>User is not authenticated.</Text>;
+  }
 
   return (
     <Box className="feedback-page">
@@ -124,6 +140,7 @@ const Feedback: React.FC = () => {
                 <FaStar key={i} color="#FFD700" />
               ))}
             </Flex>
+            {feedback.reply && (<Text mb={1}><strong>Reply: </strong>{feedback.reply}</Text>)}
           </Box>
         ))}
         <Flex mt={4} justify="center" gap={4}>

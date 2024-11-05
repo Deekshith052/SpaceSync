@@ -5,7 +5,8 @@ import { Thead, Tbody, Tr, Td, Th, Table } from '@chakra-ui/table';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import './ParkingPage.css';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode';
 
 interface ParkingSlotData {
   floor: number;
@@ -20,15 +21,35 @@ interface SlotBlockData {
 }
 
 const ParkingPage: React.FC = () => {
-  const navigate= useNavigate();
+  const navigate = useNavigate();
   const [slots, setSlots] = useState<ParkingSlotData[]>([]);
   const [availableSlots, setAvailableSlots] = useState<SlotBlockData[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<number | ''>('');
   const [selectedVehicleType, setSelectedVehicleType] = useState<string | ''>('');
   const [selectedSlot, setSelectedSlot] = useState<{ parking_id: number; slot_number: string } | null>(null);
-  
-  const user_id = '123456'; // Replace with actual user ID
+  const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);  // Loading state to delay rendering
+
+  // Decode the token and set user ID on component mount
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        setUserId(decodedToken.id);
+      } catch (error) {
+        console.error("Failed to decode token:", error);
+        alert("Invalid token.");
+        navigate('/login');
+      }
+    } else {
+      alert("User is not authenticated.");
+      navigate('/login');
+    }
+    setLoading(false);  // Set loading to false after authentication check
+  }, [navigate]);
+
   const floorOptions = [1, 2, 3, 4, 5];
   const vehicleTypeOptions = ['two-wheeler', 'four-wheeler'];
 
@@ -110,7 +131,7 @@ useEffect(() => {
         // POST request to create reservation
         await axios.post(`http://localhost:4004/api/v1/parking/reservations/slot`, {
           parking_id,
-          user_id,
+          user_id:userId,
           parking_reservation_id,
         });
 
@@ -122,6 +143,10 @@ useEffect(() => {
       }
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Box className='conatainer-box'>

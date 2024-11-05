@@ -8,9 +8,9 @@ const JWT_SECRET = 'qwertyuiopasdfghjklzxcvbnm'; // Use a secure secret in produ
 const routeRoles: { [key: string]: string[] } = {
   '/api/v1/eventSpaceBookings': ['admin', 'manager'],
   '/api/v1/eventspace': ['admin','manager'],
-  '/api/v1/feedback': ['admin', 'employee','manager','security'],
-  '/api/v1/parking/reservations': ['admin', 'manager','employee','security'],
-  '/api/v1/parking/slots': ['admin','user','manager','security'],
+  '/api/v1/feedback': ['admin', 'employee','manager'],
+  '/api/v1/parking/reservations': ['admin', 'manager','employee'],
+  '/api/v1/parking/slots': ['admin','user','manager'],
   '/api/v1/users': ['admin','employee','manager'],
   '/api/v1/workspacebooking': ['manager','admin','employee'],
   '/api/v1/workspace': ['admin', 'manager', 'employee']

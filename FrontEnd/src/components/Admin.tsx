@@ -131,7 +131,7 @@ const Admin: React.FC = () => {
           {servicesOverview.map((service, index) => (
             <div key={index} className="service-overview">
               <div className="pie-chart">
-                <h2>{service.title}</h2>
+                <h1>{service.title}</h1>
                 <Pie
                   data={{
                     labels: ['Reserved', 'Vacant'],

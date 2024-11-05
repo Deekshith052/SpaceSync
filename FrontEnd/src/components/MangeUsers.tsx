@@ -32,18 +32,21 @@ const ManageUsers: React.FC = () => {
     // Fetch users on component mount
     axios.get('http://localhost:4001/api/v1/users')
       .then(response => {
-        setUsers(response.data);
+        // Filter out users where user_id is "admin"
+        const filteredUsers = response.data.filter((user: { user_id: string }) => user.user_id !== "admin");
+        setUsers(filteredUsers);
       })
       .catch(error => {
         console.error('Error fetching users:', error);
       });
   }, []);
 
-  const filteredUsers = users.filter((user) =>
-    user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.user_id.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = users.filter((user) => 
+    (user.first_name && user.first_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (user.last_name && user.last_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (user.user_id && user.user_id.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+  
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const displayedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);

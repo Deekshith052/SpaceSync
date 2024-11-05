@@ -47,13 +47,14 @@ function App() {
 
       <Routes>
       <Route path='/user' element={<><UserNavbar /><UserPage/></>}></Route>
+      <Route path='/parkingpage' element={<><ParkingPage/></>}></Route>
       </Routes>
       <Routes>
       <Route path='/services' element={<><Navbar /><ServicePage/></>}></Route>
       </Routes>
-      <Routes>
+      {/* <Routes>
       <Route path='/parkingpage' element={<><ParkingPage/></>}></Route>
-      </Routes>
+      </Routes> */}
       <Routes>
       <Route path='/workspacereservation' element={<><WorkspaceReservation/></>}></Route>
       </Routes>

@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import UserNavbar from './UserNavbar';
 import './WorkspaceReservation.css';
 import { useNavigate } from 'react-router-dom';
-// import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 // interface DecodedToken {
 //   user_id: string;
@@ -13,8 +13,8 @@ import { useNavigate } from 'react-router-dom';
 // const token = sessionStorage.getItem('token'); 
   
 // const decoded: DecodedToken = jwt_decode(token);
-// const userId=decoded.user_id;
-const userId='U002';
+// const userId=decoded.id;
+// const userId='U002';
 
 interface Slot {
   workspace_id: string;
@@ -32,6 +32,16 @@ const WorkspaceReservation: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [reservationDetails, setReservationDetails] = useState<any>(null); // Adjust type as needed
 
+  const token = sessionStorage.getItem('token');
+  let userId = '';
+
+  if (token) {
+    const decodedToken: { id: string } = jwtDecode(token);
+    userId = decodedToken.id;
+  }
+  else{
+    alert("user is not authenticated");
+  }
   const navigate=useNavigate();
 
   const handleBookSlot = async () => {

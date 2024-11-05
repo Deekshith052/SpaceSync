@@ -1,8 +1,7 @@
-// src/components/FinalParkingPage.tsx
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Text, Center } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-// import jwt_decode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import axios from 'axios';
 import UserNavbar from './UserNavbar';
 import './FinalParkingPage.css';
@@ -20,30 +19,45 @@ interface SlotData {
 const FinalParkingPage: React.FC = () => {
   const [reservationData, setReservationData] = useState<ReservationData | null>(null);
   const [slotData, setSlotData] = useState<SlotData | null>(null);
+  const [loading, setLoading] = useState(true); // Add a loading state
   const navigate = useNavigate();
-
+  
   useEffect(() => {
-    // const token = sessionStorage.getItem('jwtToken');
-    // if (token) {
-    //   const decodedToken: any = jwt_decode(token);
-    //   const userId = decodedToken.userId;
-      const userId="123456";
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      alert("User not authenticated");
+      navigate('/login');
+      return;
+    }
+
+    try {
+      // Decode the token and extract userId
+      const decodedToken: { id: string } = jwtDecode(token);
+      const userId = decodedToken.id;
+
       // Fetch reservation data by user ID
       axios.get(`http://localhost:4004/api/v1/parking/reservations/slotByUserId/${userId}`)
         .then(response => {
           const reservation = response.data;
           setReservationData(reservation);
+
           // Fetch slot data by parking_id
           return axios.get(`http://localhost:4003/api/v1/parking/slots/${reservation.parking_id}`);
         })
         .then(response => {
           setSlotData(response.data[0]);
+          setLoading(false); // Set loading to false once data is fetched
         })
         .catch(error => {
           console.error("Error fetching reservation or slot data:", error);
+          setLoading(false); // Stop loading on error as well
         });
-    // }
-  }, []);
+    } catch (error) {
+      console.error("Token decoding failed:", error);
+      alert("Invalid token");
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const handleUnbook = () => {
     if (reservationData) {
@@ -64,6 +78,17 @@ const FinalParkingPage: React.FC = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <Box className="final-parking-container">
+        <UserNavbar />
+        <Center mt={10}>
+          <Text>Loading reservation data...</Text>
+        </Center>
+      </Box>
+    );
+  }
+
   return (
     <Box className="final-parking-container">
       <UserNavbar />
@@ -79,7 +104,7 @@ const FinalParkingPage: React.FC = () => {
             </Button>
           </>
         ) : (
-          <Text>Loading reservation data...</Text>
+          <Text>No reservation found.</Text>
         )}
       </Center>
     </Box>

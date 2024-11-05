@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode'; // Import jwt-decode
 import './Login.css';
 
 const Login: React.FC = () => {
@@ -14,15 +15,27 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      console.log(user_id,password)
+      console.log(user_id, password);
       const response = await axios.post('http://localhost:4000/api/v1/auth/login', {
         user_id,
         password,
       });
 
       console.log('Login successful:', response.data);
-      // Redirect to /user upon successful login
-      navigate('/user');
+      const token = response.data.token; // Assuming the token is returned like this
+
+      // Store the token in session storage
+      sessionStorage.setItem('token', token);
+
+      // Decode the token to get the role
+      const decodedToken: { role: string } = jwtDecode(token);
+
+      // Redirect based on role
+      if (decodedToken.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/user');
+      }
 
     } catch (err: any) {
       console.error('Error:', err);

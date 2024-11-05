@@ -7,7 +7,7 @@ import './EventSpaceReservation.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid'; // Import UUID
-// import jwt_decode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 interface EventSpaceData {
   eventspace_id: number;
@@ -30,16 +30,16 @@ const EventSpaceReservation: React.FC = () => {
       return;
     }
     try {
-      // const token = sessionStorage.getItem('token');
-      // if (!token) {
-      //   alert('User is not authenticated.');
-      //   return;
-      // }
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        alert('User is not authenticated.');
+        return;
+      }
 
     // Decode the JWT token to get the user_id
-    // const decodedToken: { user_id: number } = jwt_decode(token);
-    // const userId = decodedToken.user_id;
-      const userId="123456"
+    const decodedToken: { id: string } = jwtDecode(token);
+    const userId = decodedToken.id;
+      // const userId="123456"
 
       const eventRegistrationId = uuidv4(); // Generate a unique event_registration_id
 

@@ -1,34 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import UserNavbar from './UserNavbar';
 import axios from 'axios';
-// import jwt_decode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 // Define the structure of a reservation
 interface Reservation {
-  id: string; 
+  id: string;
   date: string;
 }
 
 interface JwtPayload {
-  user_id: string;
+  id: string;
   role: string;
 }
+
+type UserRole = 'employee' | 'manager';
 
 const TrackReservation: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string>('parking');
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const userId = '123456'; // Replace with actual user ID as needed
-  type UserRole = 'employee' | 'manager' ; // Add other roles as needed
-  const role: UserRole = 'employee';
-
   const itemsPerPage = 10;
 
-  // const token = sessionStorage.getItem('token'); 
-  // const decodedToken = token ? jwt_decode<JwtPayload>(token) : null;
-  // const userId = decodedToken ? decodedToken.user_id : null;
-  // const role = decodedToken ? decodedToken.role : null;
+  // Fetch user details from the JWT token
+  const token = sessionStorage.getItem('token');
+  let userId: string | null = null;
+  let role: UserRole | null = null;
 
+  if (token) {
+    try {
+      const decodedToken = jwtDecode<JwtPayload>(token);
+      userId = decodedToken.id;
+      role = decodedToken.role as UserRole;
+    } catch (error) {
+      console.error('Invalid token:', error);
+    }
+  }
   useEffect(() => {
     loadReservations(selectedService);
   }, [selectedService]);
@@ -97,13 +104,13 @@ const TrackReservation: React.FC = () => {
             <thead>
               <tr style={{ backgroundColor: '#e0e0e0', textAlign: 'left' }}>
                 <th style={{ padding: '10px', border: '1px solid #ddd' }}>Date</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>ID</th>
+                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Slot ID</th>
               </tr>
             </thead>
             <tbody>
               {displayedReservations.map((reservation) => (
                 <tr key={reservation.id}>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{reservation.date}</td>
+                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{reservation.date.split('T')[0]}</td>
                   <td style={{ padding: '10px', border: '1px solid #ddd' }}>{reservation.id}</td>
                 </tr>
               ))}
