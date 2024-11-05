@@ -2,6 +2,7 @@
   background-color: #f0f4f8;
   min-height: 100vh;
   padding-top: 80px;
+  
 }
 
 .admin-container.blur-background .admin-content {
@@ -12,18 +13,20 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  
+  
 }
 
 .service-overview-container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 30px;
 }
 
 .service-overview {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center; /* Align items in the center for better spacing */
   background-color: white;
   padding: 10px;
   border-radius: 8px;
@@ -31,28 +34,43 @@
   font-size: 0.9rem; /* Reduced font size for a smaller look */
 }
 
-.bar-graph {
-  flex: 1;
+.service-content-wrapper {
+  display: flex;
+  align-items: center; /* Center align the pie chart and count boxes */
+  gap: 10px; /* Maintain a small gap */
+  width: 80%; /* Ensure it takes full width */
+  
+}
+
+.pie-chart {
+  margin-left: 200px;
+  flex: 0 0 400px; /* Fixed width for the pie chart */
+  height: 400px; /* Fixed height for the pie chart */
 }
 
 .count-boxes {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-right: 100px;
 }
 
 .count-box {
-  margin: 8px 0;
+  
+  margin: 10px 0; /* Reduce margin to create a tighter look */
   text-align: center;
-  padding: 8px;
+  padding: 6px; /* Smaller padding for the boxes */
   background-color: #f7f7f7;
   border-radius: 5px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 100px;
+
 }
 
 .view-details-button {
-  margin-top: 10px;
-  padding: 8px 12px;
+  margin-right: 100px;
+  margin-top: 8px; /* Adjust margin for better spacing */
+  padding: 6px 10px; /* Smaller button padding */
   background-color: #007bff;
   color: white;
   border: none;
