@@ -130,3 +130,18 @@ export const getEventSpacesByDate = async (req: Request, res: Response) => {
   }
 };
 
+// Get all bookings by user_id
+export const getBookingsByUserId = async (req: Request, res: Response) => {
+  try {
+    const { user_id } = req.params;
+
+    const bookings = await EventSpaceBooking.find({ user_id })
+      .select('eventDate eventspace_id -_id') // Select only eventDate and eventspace_id fields
+      .sort({ eventDate: -1 }); // Sort by eventDate in descending order (latest first)
+
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+

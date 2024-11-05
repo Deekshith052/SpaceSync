@@ -1,26 +1,19 @@
-// src/components/ViewFeedback.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminNavbar from './AdminNavbar';
+import axios from 'axios';
 
 interface Feedback {
-  id: number;
+  feedback_id: string;
   userId: string;
-  comment: string;
+  content: string;
   reply?: string;
 }
 
-// Sample data for demonstration
-const sampleFeedback: Feedback[] = Array.from({ length: 30 }, (_, i) => ({
-  id: i + 1,
-  userId: `User${i + 1}`,
-  comment: `This is feedback comment number ${i + 1}.`,
-}));
-
 const ViewFeedback: React.FC = () => {
-  const [feedbacks, setFeedbacks] = useState<Feedback[]>(sampleFeedback);
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [replyText, setReplyText] = useState<string>('');
-  const [replyingToId, setReplyingToId] = useState<number | null>(null);
+  const [replyingToId, setReplyingToId] = useState<string | null>(null);
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(feedbacks.length / itemsPerPage);
@@ -28,8 +21,15 @@ const ViewFeedback: React.FC = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const displayedFeedbacks = feedbacks.slice(startIndex, startIndex + itemsPerPage);
 
-  const handleReplyClick = (id: number) => {
-    setReplyingToId(id);
+  // Fetch feedback data on component mount
+  useEffect(() => {
+    axios.get('http://localhost:4002/api/v1/feedback')
+      .then(response => setFeedbacks(response.data))
+      .catch(error => console.error('Error fetching feedback:', error));
+  }, []);
+
+  const handleReplyClick = (feedback_id: string) => {
+    setReplyingToId(feedback_id);
     setReplyText('');
   };
 
@@ -37,13 +37,17 @@ const ViewFeedback: React.FC = () => {
     setReplyText(e.target.value);
   };
 
-  const handleReplySubmit = (id: number) => {
-    setFeedbacks((prevFeedbacks) =>
-      prevFeedbacks.map((feedback) =>
-        feedback.id === id ? { ...feedback, reply: replyText } : feedback
-      )
-    );
-    setReplyingToId(null);
+  const handleReplySubmit = (feedback_id: string) => {
+    axios.put(`http://localhost:4002/api/v1/feedback/${feedback_id}`, { reply: replyText })
+      .then(() => {
+        setFeedbacks(prevFeedbacks =>
+          prevFeedbacks.map(feedback =>
+            feedback.feedback_id === feedback_id ? { ...feedback, reply: replyText } : feedback
+          )
+        );
+        setReplyingToId(null);
+      })
+      .catch(error => console.error('Error updating reply:', error));
   };
 
   return (
@@ -53,9 +57,9 @@ const ViewFeedback: React.FC = () => {
         <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>View Feedback</h1>
 
         <ul style={{ listStyleType: 'none', padding: 0 }}>
-          {displayedFeedbacks.map((feedback) => (
+          {displayedFeedbacks.map(feedback => (
             <li
-              key={feedback.id}
+              key={feedback.feedback_id}
               style={{
                 backgroundColor: '#fff',
                 padding: '15px',
@@ -66,13 +70,13 @@ const ViewFeedback: React.FC = () => {
               }}
             >
               <p><strong>User ID:</strong> {feedback.userId}</p>
-              <p><strong>Comment:</strong> {feedback.comment}</p>
+              <p><strong>Comment:</strong> {feedback.content}</p>
 
               {feedback.reply && (
                 <p style={{ color: 'green' }}><strong>Reply:</strong> {feedback.reply}</p>
               )}
 
-              {replyingToId === feedback.id ? (
+              {replyingToId === feedback.feedback_id ? (
                 <div>
                   <textarea
                     value={replyText}
@@ -82,7 +86,7 @@ const ViewFeedback: React.FC = () => {
                     style={{ width: '100%', padding: '10px', marginTop: '10px' }}
                   />
                   <button
-                    onClick={() => handleReplySubmit(feedback.id)}
+                    onClick={() => handleReplySubmit(feedback.feedback_id)}
                     style={{
                       marginTop: '10px',
                       padding: '8px 16px',
@@ -98,16 +102,17 @@ const ViewFeedback: React.FC = () => {
                 </div>
               ) : (
                 <button
-                  onClick={() => handleReplyClick(feedback.id)}
+                  onClick={() => handleReplyClick(feedback.feedback_id)}
                   style={{
                     marginTop: '10px',
                     padding: '8px 16px',
-                    backgroundColor: '#007bff',
+                    backgroundColor: feedback.reply ? '#ddd' : '#007bff',
                     color: 'white',
                     border: 'none',
                     borderRadius: '5px',
-                    cursor: 'pointer',
+                    cursor: feedback.reply ? 'not-allowed' : 'pointer',
                   }}
+                  disabled={!!feedback.reply}
                 >
                   Reply
                 </button>
@@ -118,7 +123,7 @@ const ViewFeedback: React.FC = () => {
 
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
             style={{
               padding: '8px 12px',
@@ -134,7 +139,7 @@ const ViewFeedback: React.FC = () => {
           </button>
           <span>Page {currentPage} of {totalPages}</span>
           <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
             style={{
               padding: '8px 12px',

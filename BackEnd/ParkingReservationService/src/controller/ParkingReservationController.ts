@@ -76,3 +76,19 @@ export const getRecentReservationByUserId = async (req : Request, res: Response)
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+export const getReservationsByUserId = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+
+  try {
+    const recentReservations = await Reservation.find({ user_id: userId })
+      .select('created_at parking_id -_id') // Select only created_at and parking_id fields
+      .sort({ created_at: -1 }) // Sort by created_at in descending order
+
+    
+      res.status(200).json(recentReservations);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
