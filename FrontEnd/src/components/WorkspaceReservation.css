@@ -3,8 +3,9 @@
   margin-top: 0px;
     padding: 20px;;
     
-    background: rgb(148, 185, 244);
-    background: linear-gradient(180deg, rgba(148, 185, 244, 1) 36%, #363636 100%);
+    /* background: rgb(148, 185, 244);
+    background: linear-gradient(180deg, rgba(148, 185, 244, 1) 36%, #363636 100%); */
+    background: linear-gradient(180deg, rgb(139, 170, 219) 36%, rgba(148,185,244,1) 100%)
   }
   .custom-select {
     height: 40px; /* Adjust the height as needed */

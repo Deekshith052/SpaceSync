@@ -1,8 +1,9 @@
 /* src/LandingPage.css */
 
 body{
-background-color:red;
-}
+  background: linear-gradient(180deg, rgb(139, 170, 219) 36%, rgba(148,185,244,1) 100%);
+
+} 
 
 .landing-page {
   display: flex;

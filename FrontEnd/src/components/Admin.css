@@ -1,5 +1,5 @@
 .admin-container {
-  background-color: #f0f4f8;
+  background-color: rgb(196, 194, 194);
   min-height: 100vh;
   padding-top: 80px;
   
@@ -18,7 +18,7 @@
 }
 
 .service-overview-container {
-  display: flex;
+  display:flex;
   flex-direction: column;
   gap: 30px;
 }

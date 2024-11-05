@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh; /* Full viewport height */
-  background: linear-gradient(180deg, rgba(148,185,244,1) 36%, #363636 100%);
+  background: linear-gradient(180deg, rgb(139, 170, 219) 36%, rgba(148,185,244,1) 100%);
 }
 
 .signup-container {
