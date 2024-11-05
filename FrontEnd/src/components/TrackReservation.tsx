@@ -64,8 +64,8 @@ const TrackReservation: React.FC = () => {
   return (
     <div style={{ background: 'linear-gradient(180deg, rgba(148,185,244,1) 36%, #363636 100%)', minHeight: '100vh', paddingTop: '20px' }}>
       <UserNavbar />
-      <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <div style={{ padding: '50px', maxWidth: '800px', margin: '0 auto',marginTop:'100px',marginBottom:'100px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+        <div style={{ textAlign: 'center', marginTop: '30px' }}>
           <h1>Track Your Past Reservations</h1>
         </div>
         <div style={{ marginTop: '20px' }}>

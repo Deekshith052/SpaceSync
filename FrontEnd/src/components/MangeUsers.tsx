@@ -38,9 +38,15 @@ const ManageUsers: React.FC = () => {
   const itemsPerPage = 10;
   const navigate = useNavigate();
 
-  const filteredUsers = users.filter((user) =>
-    user.first_name.toLowerCase().includes(searchTerm.toLowerCase())
+//   const filteredUsers = users.filter((user) =>
+//     user.first_name.toLowerCase().includes(searchTerm.toLowerCase())
+//   );
+const filteredUsers = users.filter((user) =>
+    user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.user_id.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const displayedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
