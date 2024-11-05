@@ -10,6 +10,7 @@ import {
   createMultipleBookings,
   getBookingsByUserIdAndDate,
   getAllBookingsByUserId,
+  getTotalReservationsByDate,
 } from '../controller/WorkspaceBookingController';
 
 const router = Router();
@@ -19,6 +20,7 @@ router.post('/workspacebookingMulti', createMultipleBookings as any)
 router.get('/workspacebooking', getBookings);
 router.get('/workspacebooking/:id', getBookingById);
 router.get('/workspacebookingDone', getWorkspacesByShiftProjectDate as any);
+router.get('/workspacebookingNumber',getTotalReservationsByDate);
 router.get('/workspacebookingUserDate', getBookingsByUserIdAndDate as any);
 router.get('/workspacebookingByUserId/:userId', getAllBookingsByUserId);
 router.put('/workspacebooking/:id', updateBooking);

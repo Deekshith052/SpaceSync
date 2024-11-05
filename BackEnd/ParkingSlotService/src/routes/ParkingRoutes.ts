@@ -9,6 +9,7 @@ import {
   createMultipleSlots,
   getAvailability,
   getSlotsWithFloorAndType,
+  getTotalAndAvailableSlots,
 } from '../controller/ParkingController';
 
 const router = Router();
@@ -31,5 +32,6 @@ router.delete('/parking/slots/:id', deleteSlot as any);
 router.get('/parking/slotsAvailable',getAvailability);
 
 router.get('/parking/slotsByFloorAndType',getSlotsWithFloorAndType);
+router.get('/parking/slotsNumber',getTotalAndAvailableSlots);
 
 export default router;

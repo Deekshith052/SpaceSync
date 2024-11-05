@@ -1,7 +1,10 @@
 // src/components/ManageUsers.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import AdminNavbar from './AdminNavbar';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface User {
   id: number;
@@ -12,24 +15,11 @@ interface User {
   phone_number: string;
   department: string;
   role: string;
-  project: string; // New field for project
+  // project: string;
 }
 
-// Sample data for demonstration
-const sampleUsers: User[] = Array.from({ length: 30 }, (_, i) => ({
-  id: i + 1,
-  user_id: `U${i + 1}`,
-  first_name: `First ${i + 1}`,
-  last_name: `Last ${i + 1}`,
-  email: `user${i + 1}@example.com`,
-  phone_number: `123-456-789${i}`,
-  department: `Department ${((i % 3) + 1)}`,
-  role: i % 2 === 0 ? 'employee' : 'manager',
-  project: `Project ${((i % 5) + 1)}`, // Assigning a project to each user
-}));
-
 const ManageUsers: React.FC = () => {
-  const [users, setUsers] = useState<User[]>(sampleUsers);
+  const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -38,15 +28,22 @@ const ManageUsers: React.FC = () => {
   const itemsPerPage = 10;
   const navigate = useNavigate();
 
-//   const filteredUsers = users.filter((user) =>
-//     user.first_name.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
-const filteredUsers = users.filter((user) =>
+  useEffect(() => {
+    // Fetch users on component mount
+    axios.get('http://localhost:4001/api/v1/users')
+      .then(response => {
+        setUsers(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching users:', error);
+      });
+  }, []);
+
+  const filteredUsers = users.filter((user) =>
     user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.user_id.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const displayedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
@@ -57,8 +54,19 @@ const filteredUsers = users.filter((user) =>
     setCurrentPage(1); // Reset to first page on new search
   };
 
-  const handleDelete = (userId: number) => {
-    setUsers(users.filter((user) => user.id !== userId));
+  const handleDelete = (userId: string) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    if (confirmDelete) {
+      axios.delete(`http://localhost:4001/api/v1/users/${userId}`)
+        .then(() => {
+          setUsers(users.filter((user) => user.user_id !== userId));
+          toast.success("User deleted successfully!");
+        })
+        .catch(error => {
+          console.error('Error deleting user:', error);
+          toast.error("Error deleting user.");
+        });
+    }
   };
 
   const handleEdit = (user: User) => {
@@ -78,15 +86,29 @@ const filteredUsers = users.filter((user) =>
 
   const handleSubmit = () => {
     if (currentUser) {
-      setUsers(users.map(user => user.id === currentUser.id ? currentUser : user));
-      setIsEditing(false);
-      setCurrentUser(null);
+      axios.put(`http://localhost:4001/api/v1/users/${currentUser.user_id}`, currentUser)
+        .then(() => {
+          setUsers(users.map(user => user.user_id === currentUser.user_id ? currentUser : user));
+          toast.success("User updated successfully!");
+          setIsEditing(false);
+          setCurrentUser(null);
+        })
+        .catch(error => {
+          console.error('Error updating user:', error);
+          toast.error("Error updating user.");
+        });
     }
+  };
+
+  const handleBack = () => {
+    setIsEditing(false);
+    setCurrentUser(null);
   };
 
   return (
     <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh', paddingTop: '60px' }}>
       <AdminNavbar />
+      <ToastContainer />
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
         <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Manage Users</h1>
 
@@ -104,7 +126,7 @@ const filteredUsers = users.filter((user) =>
           <ul style={{ listStyleType: 'none', padding: 0 }}>
             {displayedUsers.map((user) => (
               <li
-                key={user.id}
+                key={user.user_id}
                 style={{
                   backgroundColor: '#fff',
                   padding: '15px',
@@ -123,7 +145,7 @@ const filteredUsers = users.filter((user) =>
                   <p><strong>Phone:</strong> {user.phone_number}</p>
                   <p><strong>Department:</strong> {user.department}</p>
                   <p><strong>Role:</strong> {user.role}</p>
-                  <p><strong>Project:</strong> {user.project}</p> {/* Display project */}
+                  {/* <p><strong>Project:</strong> {user.project}</p> */}
                 </div>
                 <div>
                   <button
@@ -141,7 +163,7 @@ const filteredUsers = users.filter((user) =>
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(user.id)}
+                    onClick={() => handleDelete(user.user_id)}
                     style={{
                       padding: '8px 12px',
                       backgroundColor: '#dc3545',
@@ -204,67 +226,79 @@ const filteredUsers = users.filter((user) =>
                     <select name="role" value={currentUser.role} onChange={handleInputChange}>
                       <option value="employee">Employee</option>
                       <option value="manager">Manager</option>
-                      <option value="security">Security</option>
                     </select>
                   </label>
                 </div>
-                <div>
+                {/* <div>
                   <label>
                     Project:
                     <input type="text" name="project" value={currentUser.project} onChange={handleInputChange} />
                   </label>
-                </div>
+                </div> */}
                 <button onClick={handleSubmit} style={{
-                    padding: '8px 12px',
-                    backgroundColor: '#28a745',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    marginTop: '10px',
-                  }}>
+                  padding: '8px 12px',
+                  backgroundColor: '#28a745',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  marginTop: '10px',
+                }}>
                   Submit
                 </button>
+                <button onClick={handleBack} style={{
+                  padding: '8px 12px',
+                  backgroundColor: '#6c757d',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  marginTop: '10px',
+                  marginLeft: '10px',
+                }}>
+                  Back
+                </button>
               </>
-            ) : (
-              <p>No user selected for editing.</p>
-            )}
+            ) : null}
           </div>
         )}
 
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            style={{
-              padding: '8px 12px',
-              backgroundColor: currentPage === 1 ? '#ddd' : '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-              marginRight: '10px',
-            }}
-          >
-            Previous
-          </button>
-          <span>Page {currentPage} of {totalPages}</span>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            style={{
-              padding: '8px 12px',
-              backgroundColor: currentPage === totalPages ? '#ddd' : '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-              marginLeft: '10px',
-            }}
-          >
-            Next
-          </button>
-        </div>
+        {/* Pagination controls */}
+        {!isEditing && (
+          <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              style={{
+                padding: '8px 12px',
+                marginRight: '10px',
+                backgroundColor: currentPage === 1 ? '#6c757d' : '#007bff',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+              }}
+            >
+              Previous
+            </button>
+            <span style={{ margin: '0 10px' }}>{currentPage} / {totalPages}</span>
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              style={{
+                padding: '8px 12px',
+                marginLeft: '10px',
+                backgroundColor: currentPage === totalPages ? '#6c757d' : '#007bff',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+              }}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

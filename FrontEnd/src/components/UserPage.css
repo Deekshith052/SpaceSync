@@ -1,23 +1,46 @@
 /* src/components/UserPage.css */
 .main-page {
-    padding: 20px;
-    text-align: center;
-  }
-  
+  padding: 20px;
+  text-align: center;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center; /* Center images horizontally */
+  margin-top: 20px;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
+
+.slot-image {
+  width: 300px; /* Adjust width as needed */
+  height: auto; /* Maintain aspect ratio */
+  cursor: pointer; /* Indicate it's clickable */
+  margin: 10px; /* Add margin around images for spacing */
+  border-radius: 8px; /* Optional: rounded corners for images */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Optional: add a subtle shadow for depth */
+  transition: transform 0.2s; /* Optional: add a transition for hover effect */
+}
+
+.slot-image:hover {
+  transform: scale(1.05); /* Optional: scale image slightly on hover */
+}
+
+.image-container p {
+  text-align: center; /* Center text under images */
+  margin-top: 10px; /* Add space above the text */
+  font-weight: bold; /* Make text bold */
+  color: #333; /* Darker color for better readability */
+}
+
+/* Additional styles for responsiveness */
+@media (max-width: 768px) {
   .image-container {
-    display: flex;
-    justify-content: space-around; /* Evenly distribute images */
-    margin-top: 20px;
-    margin-left: 90px;
+      flex-direction: column; /* Stack images on smaller screens */
+      align-items: center; /* Center images */
   }
-  
+
   .slot-image {
-    width: 300px; /* Adjust width as needed */
-    height: auto; /* Maintain aspect ratio */
-    cursor: pointer; /* Indicate it's clickable */
+      width: 80%; /* Adjust width for smaller screens */
+      max-width: 300px; /* Limit maximum width */
   }
-  
-  .image-container p {
-    text-align: center; /* Center text under images */
-  }
-  
+}

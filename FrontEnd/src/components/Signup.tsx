@@ -161,7 +161,7 @@ const Signup: React.FC = () => {
                 required
               />
             </div>
-            <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="role">Role</label>
               <select
                 id="role"
@@ -173,7 +173,7 @@ const Signup: React.FC = () => {
                 <option value="employee">Employee</option>
                 <option value="security">Security</option>
               </select>
-            </div>
+            </div> */}
             <div className="form-group">
               <label htmlFor="password">Set Password</label>
               <input

@@ -153,3 +153,23 @@ export const getSlotsWithFloorAndType = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error fetching slots', error });
   }
 };
+
+// Get total slots and available slots
+export const getTotalAndAvailableSlots = async (req: Request, res: Response) => {
+  try {
+    // Count total slots
+    const totalSlotsCount = await ParkingSlot.countDocuments();
+
+    // Count available slots
+    const availableSlotsCount = await ParkingSlot.countDocuments({ availability: true });
+
+    // Respond with total and available slots
+    res.status(200).json({
+      totalSlots: totalSlotsCount,
+      reservedSlots: totalSlotsCount-availableSlotsCount
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching slots count', error });
+  }
+};

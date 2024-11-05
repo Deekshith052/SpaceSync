@@ -145,3 +145,25 @@ export const getBookingsByUserId = async (req: Request, res: Response) => {
   }
 };
 
+export const getTotalReservationsByDate = async (req: Request, res: Response) => {
+  try {
+    // Get today's date
+    const today = new Date();
+    const startDate = new Date(today.setHours(0, 0, 0, 0)); // Start of the day
+    const endDate = new Date(today.setHours(23, 59, 59, 999)); // End of the day
+
+    // Count bookings for today
+    const totalReservations = await EventSpaceBooking.countDocuments({
+      eventDate: {
+        $gte: startDate,
+        $lt: endDate,
+      },
+    });
+
+    // Respond with the total number of reservations
+    res.status(200).json({ totalSlots:10, reservedSlots:totalReservations });
+  } catch (error) {
+    console.error('Error fetching total reservations:', error);
+    res.status(500).json({ message: 'Error fetching total reservations', error });
+  }
+};

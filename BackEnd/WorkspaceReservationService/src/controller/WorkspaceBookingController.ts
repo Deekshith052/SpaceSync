@@ -209,3 +209,28 @@ export const getAllBookingsByUserId = async (req: Request, res: Response) => {
       res.status(500).json({ message: 'Internal server error' });
   } 
 };
+
+
+export const getTotalReservationsByDate = async (req: Request, res: Response) => {
+  try {
+    // Get today's date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to the start of today
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1); // Set to the start of tomorrow
+
+    // Count bookings for today
+    const totalReservations = await Booking.countDocuments({
+      date: {
+        $gte: today,
+        $lt: tomorrow,
+      },
+    });
+
+    // Respond with the total number of reservations
+    res.status(200).json({ totalSlots:90 ,reservedSlots:totalReservations });
+  } catch (error) {
+    console.error('Error fetching total reservations:', error);
+    res.status(500).json({ message: 'Error fetching total reservations', error });
+  }
+};
