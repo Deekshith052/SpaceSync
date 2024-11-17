@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect("mongodb://127.0.0.1:27017/SpaceSyncParkingSlotsDB")
+mongoose.connect("mongodb+srv://deekshith:O88J7wjAZw9G9omo@cluster0.aznry.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 .then(() => console.log('Connected to MongoDB'))
 .catch(error => console.error('Connection error', error));
 
