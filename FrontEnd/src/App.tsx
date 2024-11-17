@@ -46,7 +46,7 @@ function App() {
       
 
       <Routes>
-      <Route path='/user' element={<><UserNavbar /><UserPage/></>}></Route>
+      <Route path='/user' element={<><UserPage/></>}></Route>
       <Route path='/parkingpage' element={<><ParkingPage/></>}></Route>
       </Routes>
       <Routes>

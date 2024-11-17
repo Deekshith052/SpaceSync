@@ -33,6 +33,7 @@ import eve from "../image/U.jpg";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
+import UserNavbar from './UserNavbar';
 
 const UserPage: React.FC = () => {
   const navigate = useNavigate();
@@ -84,6 +85,8 @@ const UserPage: React.FC = () => {
   }
 
   return (
+    <>
+    <UserNavbar />
     <Box className="main-page" p={5} mt={50}>
       {role === "manager" ? (
         <>
@@ -137,7 +140,9 @@ const UserPage: React.FC = () => {
         </>
       )}
     </Box>
+    </>
   );
+  
 };
 
 export default UserPage;
