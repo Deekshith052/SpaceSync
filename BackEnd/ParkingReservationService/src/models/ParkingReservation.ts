@@ -16,4 +16,4 @@ const ReservationSchema: Schema = new Schema({
   exit_at: { type: Date },
 });
 
-export default mongoose.model<ReservationDocument>('Reservation', ReservationSchema);
+export default mongoose.model<ReservationDocument>('ParkingReservation', ReservationSchema);

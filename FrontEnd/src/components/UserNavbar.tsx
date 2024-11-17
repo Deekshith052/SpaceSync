@@ -1,19 +1,55 @@
 // src/components/UserNavbar.tsx
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import './UserNavbar.css'; // Custom CSS file for dropdown
 
-import { Box, Flex, Heading, Link } from '@chakra-ui/react';
-import './UserNavbar.css'; 
 const UserNavbar: React.FC = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Navigate to the profile page
+  const navigateToProfile = () => {
+    navigate('/profile');
+  };
+
+  // Logout and redirect to the landing page
+  const logout = () => {
+    navigate('/');
+  };
+
   return (
-    <Flex className='user-navbar' p={4} justify="space-between" align="center">
-      <Heading size="lg">SpaceSync</Heading>
-      <Flex gap={4}>
-        <Link href="/user" color="white">Book a Slot</Link>
-        <Link href="/track-reservation" color="white">Track Reservation</Link>
-        <Link href="/feedback" color="white">Feedback</Link>
-        <Link href="/" color="white">Logout</Link>
-      </Flex>
-    </Flex>
+    <div className="user-navbar">
+      <div className="navbar-container">
+        <h1>SpaceSync</h1>
+        <div className="nav-links">
+          <Link to="/user">Book a Slot</Link>
+          <Link to="/track-reservation">Track Reservation</Link>
+          <Link to="/feedback">Feedback</Link>
+        </div>
+
+        {/* Profile Icon and Dropdown */}
+        <div className="profile-container">
+          <button
+            className="profile-button"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            👤 {/* Profile Icon */}
+          </button>
+
+          {isDropdownOpen && (
+            <div className="dropdown-menu">
+              <button onClick={navigateToProfile} className="dropdown-item">
+                Profile
+              </button>
+              <button onClick={logout} className="dropdown-item">
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
