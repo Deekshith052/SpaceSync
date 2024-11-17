@@ -18,5 +18,5 @@ const bookingSchema = new Schema<IBooking>({
   date: { type: Date, required: true },
 });
 
-const Booking = model<IBooking>('Booking', bookingSchema);
+const Booking = model<IBooking>('WorkspaceBooking', bookingSchema);
 export default Booking;

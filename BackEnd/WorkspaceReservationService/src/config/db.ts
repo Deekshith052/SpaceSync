@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/SpaceSyncWorkspaceBookingDB');
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://deekshith:O88J7wjAZw9G9omo@cluster0.aznry.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
     console.log('MongoDB connected');
   } catch (error) {
     console.error('MongoDB connection error:', error);
