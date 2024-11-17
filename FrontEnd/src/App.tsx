@@ -25,6 +25,8 @@ import Feedback from './components/Feedback';
 import Admin from './components/Admin';
 import ViewFeedback from './components/ViewFeedback';
 import ManageUsers from './components/MangeUsers';
+import Profile from './components/ProfileModal';
+import ProfileModal from './components/ProfileModal';
 
 
 
@@ -99,6 +101,8 @@ function App() {
       <Routes>
       <Route path='/manage-users' element={<><ManageUsers/></>}></Route>
       </Routes> 
+
+      
 
     </Router>
     
